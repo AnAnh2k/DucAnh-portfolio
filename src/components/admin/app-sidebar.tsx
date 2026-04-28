@@ -34,6 +34,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
     fetchUnread()
     
+    // Lắng nghe event tự định nghĩa từ MessagesPage
+    const handleManualRefresh = () => fetchUnread()
+    window.addEventListener('unread-count-changed', handleManualRefresh)
+
     // Lắng nghe thay đổi realtime để cập nhật số lượng
     const channel = supabase
       .channel('schema-db-changes')
@@ -43,6 +47,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       .subscribe()
 
     return () => {
+      window.removeEventListener('unread-count-changed', handleManualRefresh)
       supabase.removeChannel(channel)
     }
   }, [])

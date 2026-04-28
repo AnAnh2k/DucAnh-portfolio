@@ -53,7 +53,7 @@ section {
 
 .container {
   margin: 0 auto;
-  max-width: 1536px;
+  max-width: 1100px;
   padding: 0 2rem;
 }
 
@@ -86,6 +86,19 @@ section {
   margin-bottom: 10px;
   align-items: center;
   flex-wrap: wrap;
+}
+
+/* Legacy-style panel used across main sections */
+.section__panel {
+  background: var(--surface-raised);
+  border: 1px solid var(--border-color);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 20px 40px -28px var(--shadow-color);
+}
+
+.section__panel > .section__header {
+  align-items: center;
 }
 
 .site-menu {

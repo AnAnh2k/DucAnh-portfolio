@@ -49,8 +49,12 @@ export default function MessagesPage() {
       .eq("id", id)
     
     if (error) {
-      toast.error("Lỗi cập nhật. Hãy đảm bảo bảng có cột is_read.")
+      console.error("Supabase Error:", error)
+      toast.error("Lỗi: " + error.message)
     } else {
+      toast.success(currentStatus ? "Đã đánh dấu là chưa đọc" : "Đã đánh dấu là đã đọc")
+      // Dispatch custom event to notify sidebar
+      window.dispatchEvent(new Event('unread-count-changed'))
       fetchMessages()
     }
   }
@@ -99,16 +103,16 @@ export default function MessagesPage() {
                   className={cn(
                     "group relative bg-white p-5 rounded-xl cursor-pointer transition-all border-l-4",
                     selectedId === c.id 
-                      ? "border-blue-500 shadow-md translate-x-1" 
+                      ? (c.is_read ? "border-emerald-500 shadow-md translate-x-1" : "border-blue-500 shadow-md translate-x-1")
                       : "border-transparent shadow-sm hover:border-blue-200",
                   )}
                 >
                   <div className="flex justify-between items-center mb-2">
                     <span className={cn(
                       "px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-wider",
-                      c.is_read ? "bg-slate-100 text-slate-400" : "bg-blue-100 text-blue-600"
+                      c.is_read ? "bg-emerald-100 text-emerald-600" : "bg-blue-100 text-blue-600"
                     )}>
-                      {c.is_read ? "ĐÃ XEM" : "CHƯA XEM"}
+                      {c.is_read ? "ĐÃ ĐỌC" : "CHƯA XEM"}
                     </span>
                     <span className="text-[10px] text-slate-400 font-bold">{new Date(c.created_at).toLocaleDateString('vi-VN')}</span>
                   </div>
@@ -127,7 +131,7 @@ export default function MessagesPage() {
           {selectedMessage ? (
             <div className="flex-1 flex flex-col min-h-0 animate-in slide-in-from-right-4 duration-300">
                {/* Detail Header */}
-               <div className="px-10 py-8 border-b border-slate-50">
+               <div className="px-10 py-6 border-b border-slate-50">
                   <div className="flex justify-between items-start">
                     <div className="space-y-1">
                       <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">{selectedMessage.name}</h2>
@@ -144,42 +148,28 @@ export default function MessagesPage() {
                   </div>
                </div>
 
-               <div className="flex-1 p-10 flex flex-col min-h-0">
+               <div className="flex-1 px-10 py-8 flex flex-col min-h-0">
                   {/* Small Grid Info */}
-                  <div className="grid grid-cols-2 gap-y-5 gap-x-12 mb-10">
+                  <div className="grid grid-cols-2 gap-y-5 gap-x-12 mb-8">
                     <div className="space-y-1">
                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Người gửi</span>
                       <div className="flex items-center gap-2 text-slate-900 font-black text-sm">
-                        <User className="w-4 h-4 text-blue-500" /> <span>{selectedMessage.name}</span>
-                      </div>
-                    </div>
-                    <div className="space-y-1">
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Số điện thoại</span>
-                      <div className="flex items-center gap-2 text-slate-900 font-black text-sm">
-                        <Phone className="w-4 h-4 text-blue-500" /> <span>{selectedMessage.phone || selectedMessage.name}</span>
+                        <User className={cn("w-4 h-4", selectedMessage.is_read ? "text-emerald-500" : "text-blue-500")} /> <span>{selectedMessage.name}</span>
                       </div>
                     </div>
                     <div className="space-y-1">
                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Email</span>
                       <div className="flex items-center gap-2 text-slate-900 font-black text-sm">
-                        <Mail className="w-4 h-4 text-blue-500" /> <span>{selectedMessage.email}</span>
-                      </div>
-                    </div>
-                    <div className="space-y-1">
-                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Địa chỉ</span>
-                      <div className="flex items-center gap-2 text-slate-900 font-black text-sm">
-                        <MapPin className="w-4 h-4 text-blue-500" /> <span>{selectedMessage.address || selectedMessage.name}</span>
+                        <Mail className={cn("w-4 h-4", selectedMessage.is_read ? "text-emerald-500" : "text-blue-500")} /> <span>{selectedMessage.email}</span>
                       </div>
                     </div>
                   </div>
                   
                   {/* Large Message Body */}
-                  <div className="flex-1 bg-slate-50/50 rounded-3xl p-10 border border-slate-100 flex flex-col min-h-0 mb-8 shadow-inner">
-                    <div className="pb-4 mb-6 border-b border-slate-200/50">
-                       <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Nội dung chi tiết</h3>
-                    </div>
-                    <div className="flex-1 overflow-y-auto no-scrollbar italic pr-4">
-                      <p className="text-xl text-slate-800 leading-relaxed font-bold">
+                  <div className="flex-1 flex flex-col min-h-0 mb-6">
+                    <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 ml-1">Nội dung chi tiết</h3>
+                    <div className="flex-1 bg-slate-50 rounded-2xl p-8 border border-slate-100 overflow-y-auto no-scrollbar shadow-inner">
+                      <p className="text-lg text-slate-900 leading-relaxed font-bold italic">
                         {selectedMessage.message}
                       </p>
                     </div>
@@ -196,12 +186,12 @@ export default function MessagesPage() {
                     <Button 
                       variant="outline"
                       className={cn(
-                        "flex-1 h-14 rounded-2xl font-black text-base transition-all border-slate-200 border-2 bg-white text-slate-700 hover:bg-slate-50 gap-3 shadow-sm",
-                        selectedMessage.is_read && "bg-slate-50 text-slate-400 border-slate-100 shadow-none"
+                        "flex-1 h-14 rounded-2xl font-black text-base transition-all border-slate-200 border-2 bg-white text-slate-700 hover:!bg-blue-50 hover:!text-slate-700 gap-3 shadow-sm",
+                        selectedMessage.is_read && "bg-emerald-50 text-emerald-600 border-emerald-100 shadow-none hover:!bg-emerald-100 hover:!text-emerald-700"
                       )}
                       onClick={(e) => handleToggleRead(e, selectedMessage.id, selectedMessage.is_read)}
                     >
-                      <Check className="w-5 h-5" /> Đánh dấu đã giải quyết
+                      <Check className="w-5 h-5" /> {selectedMessage.is_read ? "Đã đọc" : "Đánh dấu đã đọc"}
                     </Button>
                   </div>
                </div>
