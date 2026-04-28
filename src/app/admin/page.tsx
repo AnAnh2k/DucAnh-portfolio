@@ -27,22 +27,48 @@ export default function AdminDashboard() {
       if (data) setLatest(data)
 
       // Fetch daily visits for chart
-      const { data: logs } = await supabase
+      const { data: logs, error: logError } = await supabase
         .from("visitor_logs")
         .select("created_at")
       
-      if (logs) {
+      if (logError) {
+        console.error("Error fetching logs:", logError)
+        return
+      }
+
+      if (logs && logs.length > 0) {
         const counts: Record<string, number> = {}
-        // Group by day for the last 7 days
+        
+        // Tạo dữ liệu cho 7 ngày gần nhất (bao gồm cả những ngày có 0 lượt truy cập)
+        for (let i = 6; i >= 0; i--) {
+          const d = new Date()
+          d.setDate(d.getDate() - i)
+          const dateStr = d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' })
+          counts[dateStr] = 0
+        }
+
+        // Đổ dữ liệu thực tế vào
         logs.forEach(log => {
           const date = new Date(log.created_at).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' })
-          counts[date] = (counts[date] || 0) + 1
+          if (counts[date] !== undefined) {
+            counts[date] += 1
+          }
         })
         
-        const formatted = Object.entries(counts)
-          .map(([name, visits]) => ({ name, visits }))
-          .slice(-7) // Last 7 days
+        const formatted = Object.entries(counts).map(([name, visits]) => ({ name, visits }))
         setChartData(formatted)
+      } else {
+        // Mặc định 0 cho 7 ngày nếu hoàn toàn chưa có log
+        const emptyData = []
+        for (let i = 6; i >= 0; i--) {
+          const d = new Date()
+          d.setDate(d.getDate() - i)
+          emptyData.push({
+            name: d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' }),
+            visits: 0
+          })
+        }
+        setChartData(emptyData)
       }
     })()
   }, [])

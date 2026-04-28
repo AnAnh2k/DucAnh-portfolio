@@ -20,7 +20,7 @@ function DialogTrigger({
     return (
       <DialogPrimitive.Trigger
         data-slot="dialog-trigger"
-        render={children}
+        render={children as React.ReactElement}
         {...rest}
       />
     )
@@ -41,7 +41,7 @@ function DialogClose({
     return (
       <DialogPrimitive.Close
         data-slot="dialog-close"
-        render={children}
+        render={children as React.ReactElement}
         {...rest}
       />
     )
