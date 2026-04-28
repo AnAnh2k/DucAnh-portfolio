@@ -10,12 +10,17 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
+import { ConfirmModal } from "@/components/ui/confirm-modal"
 
 export default function MessagesPage() {
   const [contacts, setContacts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
+  const [deleteModal, setDeleteModal] = useState<{ isOpen: boolean, id: string }>({
+    isOpen: false,
+    id: ""
+  })
 
   useEffect(() => {
     fetchMessages()
@@ -30,18 +35,22 @@ export default function MessagesPage() {
     window.dispatchEvent(new CustomEvent('api-loading', { detail: false }))
   }
 
-  const handleDelete = async (e: React.MouseEvent, id: string) => {
-    e.stopPropagation()
-    if (!confirm("Xóa tin nhắn này?")) return
+  const handleDelete = async () => {
+    const { id } = deleteModal
+    if (!id) return
+    
     window.dispatchEvent(new CustomEvent('api-loading', { detail: true }))
-    const { error } = await supabase.from("contacts").delete().eq("id", id)
-    if (error) {
-      toast.error("Lỗi: " + error.message)
-      window.dispatchEvent(new CustomEvent('api-loading', { detail: false }))
-    } else {
+    try {
+      const { error } = await supabase.from("contacts").delete().eq("id", id)
+      if (error) throw error
+      
       toast.success("Đã xóa tin nhắn")
       if (selectedId === id) setSelectedId(null)
+      window.dispatchEvent(new CustomEvent('api-loading', { detail: false }))
       fetchMessages()
+    } catch (error: any) {
+      toast.error("Lỗi: " + error.message)
+      window.dispatchEvent(new CustomEvent('api-loading', { detail: false }))
     }
   }
 
@@ -147,7 +156,7 @@ export default function MessagesPage() {
                       variant="ghost" 
                       size="icon" 
                       className="w-10 h-10 rounded-lg text-slate-300 hover:text-red-500 hover:bg-red-50 transition-colors"
-                      onClick={(e) => handleDelete(e, selectedMessage.id)}
+                      onClick={() => setDeleteModal({ isOpen: true, id: selectedMessage.id })}
                     >
                       <Trash2 className="w-5 h-5" />
                     </Button>
@@ -215,6 +224,17 @@ export default function MessagesPage() {
           )}
         </div>
       </div>
+      <ConfirmModal 
+        isOpen={deleteModal.isOpen}
+        onClose={() => setDeleteModal({ ...deleteModal, isOpen: false })}
+        onConfirm={handleDelete}
+        title="Xóa tin nhắn"
+        message="Bạn có chắc chắn muốn xóa tin nhắn này không? Hành động này không thể hoàn tác."
+        type="danger"
+        icon="delete"
+        confirmText="Xác nhận xóa"
+        cancelText="Hủy bỏ"
+      />
     </div>
   )
 }

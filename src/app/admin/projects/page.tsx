@@ -9,6 +9,7 @@ import { toast } from "sonner"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
 import { FolderKanban, Plus, ExternalLink, Code, Trash2, Image as ImageIcon, Loader2, Pencil, ChevronDown } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
+import { ConfirmModal } from "@/components/ui/confirm-modal"
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<any[]>([])
@@ -25,6 +26,12 @@ export default function ProjectsPage() {
   const [repoUrl, setRepoUrl] = useState("")
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  
+  const [deleteModal, setDeleteModal] = useState<{ isOpen: boolean, id: string, imageUrl: string }>({
+    isOpen: false,
+    id: "",
+    imageUrl: ""
+  })
 
   useEffect(() => {
     fetchProjects()
@@ -122,9 +129,9 @@ export default function ProjectsPage() {
     }
   }
 
-  const handleDeleteProject = async (id: string, imageUrl: string) => {
-    if (!confirm("Xác nhận xóa dự án này?")) return
-
+  const handleDeleteProject = async () => {
+    const { id, imageUrl } = deleteModal
+    window.dispatchEvent(new CustomEvent('api-loading', { detail: true }))
     try {
       const { error: dbError } = await supabase.from("projects").delete().eq("id", id)
       if (dbError) throw dbError
@@ -138,6 +145,9 @@ export default function ProjectsPage() {
       fetchProjects()
     } catch (error: any) {
       toast.error("Lỗi: " + error.message)
+      window.dispatchEvent(new CustomEvent('api-loading', { detail: false }))
+    } finally {
+      window.dispatchEvent(new CustomEvent('api-loading', { detail: false }))
     }
   }
 
@@ -365,7 +375,7 @@ export default function ProjectsPage() {
                         variant="ghost"
                         size="icon"
                         className="text-red-400 hover:text-red-600 hover:bg-red-50 rounded-full w-9 h-9"
-                        onClick={() => handleDeleteProject(p.id, p.image_url)}
+                        onClick={() => setDeleteModal({ isOpen: true, id: p.id, imageUrl: p.image_url })}
                       >
                         <Trash2 className="w-4.5 h-4.5" />
                       </Button>
@@ -377,6 +387,18 @@ export default function ProjectsPage() {
           </TableBody>
         </Table>
       </Card>
+
+      <ConfirmModal 
+        isOpen={deleteModal.isOpen}
+        onClose={() => setDeleteModal({ ...deleteModal, isOpen: false })}
+        onConfirm={handleDeleteProject}
+        title="Xóa dự án"
+        message="Bạn có chắc chắn muốn xóa dự án này? Hành động này không thể hoàn tác và ảnh sẽ bị xóa khỏi hệ thống."
+        type="danger"
+        icon="delete"
+        confirmText="Xác nhận xóa"
+        cancelText="Hủy bỏ"
+      />
     </div>
   )
 }
