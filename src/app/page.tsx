@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Download, Mail, ChevronRight, ExternalLink, Code } from "lucide-react";
+import { Download, Mail, ChevronRight, ExternalLink, Code, TrendingUp } from "lucide-react";
 import "./simple-ui.css";
+import { VisitorStatsCard } from "@/components/visitor-stats";
 
 export default function Portfolio() {
   const [projects, setProjects] = useState<any[]>([]);
@@ -148,6 +149,7 @@ export default function Portfolio() {
       </div>
 
       <div className="portfolio-theme min-h-dvh flex flex-col bg-slate-950 text-slate-100 font-sans scroll-smooth selection:bg-blue-500/30 relative z-10">
+        <VisitorStatsCard variant="floating" />
         {/* Navigation */}
         <nav className="site-menu fixed top-6 left-1/2 -translate-x-1/2 w-fit mx-auto z-[100]" aria-label="Primary">
           <a
@@ -194,21 +196,17 @@ export default function Portfolio() {
                 Available for work
               </div>
               <h2 className="font-extrabold tracking-tight leading-[1.1] text-slate-100">
-                <span className="text-4xl md:text-5xl block mb-2">
-                  Xin chào, tôi là
+                <span className="text-2xl md:text-3xl block mb-3 font-medium text-slate-400">
+                  xin chào, mình là
                 </span>
                 <span className="text-6xl md:text-7xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
                   An Đức Anh
                 </span>
               </h2>
               <p className="text-lg md:text-xl text-slate-400 max-w-xl mx-auto md:mx-0 leading-relaxed font-medium">
-                Một{" "}
-                <span className="text-slate-100 font-bold">
-                  Frontend Developer Intern
-                </span>{" "}
-                đam mê thiết kế và kiến trúc web hiện đại. Tôi biến những ý
-                tưởng phức tạp thành những giao diện mượt mà, tối ưu và thân
-                thiện với người dùng.
+                Mình sinh năm <span className="text-slate-100 font-bold">2004</span>, 
+                hiện tại mình là <span className="text-slate-100 font-bold">sinh viên năm cuối</span> mong muốn 
+                trở thành <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 font-black">Fullstack Web Developer</span>.
               </p>
               <div className="flex flex-wrap items-center gap-4 pt-6 justify-center md:justify-start">
                 <a href="#ProjectContainer">
