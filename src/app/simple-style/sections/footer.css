@@ -1,0 +1,10 @@
+/** Footer */
+footer {
+  padding: 40px 0;
+  font-size: var(--caption-font-size);
+  color: var(--text-tertiary);
+  text-align: center;
+  background-image: var(--gradient-color);
+  max-width: none !important;
+  border-top: 1px solid var(--border-color);
+}

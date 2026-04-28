@@ -1,0 +1,108 @@
+/** ========= 
+	header
+===============*/
+header {
+  margin-top: 40px;
+}
+
+.header__container {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.header__title {
+  font-size: var(--h2-font-size);
+  line-height: var(--h2-line-height);
+  font-weight: 600;
+}
+
+.header__column--left {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+.header__column--left .header__content--left {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.header__column--left .header__badge_container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  text-align: center;
+}
+.badge {
+  font-size: var(--caption-font-size);
+  line-height: var(--caption-line-height);
+  color: var(--text-primary);
+  padding: 4px 12px;
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.header__column--left p {
+  max-width: 38ch;
+  line-height: 1.65;
+}
+.header__column--left p span {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.header__column--right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 1.25rem;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: 0 16px 28px -24px var(--shadow-color);
+}
+.header__column--right p {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+  line-height: 1.5;
+}
+.header__column--right p span:first-child {
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+.header__column--right p span:last-child {
+  color: var(--text-primary);
+  font-weight: 600;
+  text-align: right;
+  word-break: break-word;
+}
+.header__column--right p span:last-child a {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 2px;
+  transition:
+    color 0.2s ease,
+    text-decoration-color 0.2s ease;
+}
+.header__img {
+  border-radius: 100px;
+  width: 132px;
+  height: 132px;
+  box-shadow:
+    inset 0px -1px 1px hsla(0, 0%, 100%, 0.5),
+    0 4px 6px -1px hsla(0, 0%, 0%, 0.2),
+    0 2px 4px -2px hsla(0, 0%, 0%, 0.2),
+    inset 0px 1px 3px hsla(0, 0%, 0%, 0.1);
+  background-image: url("/assets/avatar.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  flex-shrink: 0;
+}

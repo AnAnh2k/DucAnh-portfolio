@@ -1,0 +1,42 @@
+/* Reset + Theme tokens from simple-portfolio */
+/* (trimmed to essential tokens used by sections) */
+:root {
+  --p-500-code: 228, 81%, 63%;
+  --p-700-code: 234, 56%, 51%;
+  --p-950-code: 233, 45%, 20%;
+  --bg-color: hsl(226, 44%, 8%);
+  --surface-color: hsla(225, 38%, 15%, 0.88);
+  --surface-raised: hsla(224, 38%, 19%, 0.9);
+  --text-primary: hsl(210, 40%, 97%);
+  --text-secondary: hsl(216, 24%, 78%);
+  --text-tertiary: hsl(216, 20%, 67%);
+  --border-color: hsla(197, 90%, 68%, 0.2);
+  --border-strong: hsla(197, 90%, 68%, 0.45);
+  --shadow-color: hsla(230, 80%, 2%, 0.65);
+  --spotlight-color: hsla(193, 97%, 66%, 0.1);
+  --control-bg: hsla(223, 43%, 17%, 0.92);
+  --control-border: hsla(192, 96%, 67%, 0.35);
+  --main-gradient-color: linear-gradient(
+    90deg,
+    hsl(191, 98%, 67%),
+    hsl(231, 92%, 69%)
+  );
+  --h1-font-size: 2rem;
+  --h1-line-height: 2.25rem;
+  --h2-font-size: 1.6rem;
+  --h2-line-height: 2rem;
+  --p-font-size: 1rem;
+  --p-line-height: 1.5rem;
+  --p-letter-spacing: 0.025rem;
+  --caption-font-size: 0.875rem;
+}
+
+html[data-theme="light"] {
+  --bg-color: hsl(210, 43%, 98%);
+  --surface-color: hsla(0, 0%, 100%, 0.92);
+  --text-primary: hsl(232, 41%, 18%);
+  --text-secondary: hsl(226, 20%, 36%);
+  --text-tertiary: hsl(222, 16%, 49%);
+  --border-color: hsla(229, 42%, 55%, 0.2);
+  --border-strong: hsla(229, 50%, 47%, 0.34);
+}

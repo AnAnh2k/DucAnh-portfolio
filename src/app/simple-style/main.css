@@ -1,0 +1,206 @@
+@import "./theme.css";
+@import "./sections/header.css";
+@import "./sections/about-me.css";
+@import "./sections/skills.css";
+@import "./sections/projects.css";
+@import "./sections/footer.css";
+@import "./animation.css";
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  font-size: var(--p-font-size);
+  line-height: var(--p-line-height);
+  letter-spacing: var(--p-letter-spacing);
+  font-family: "Chakra Petch", sans-serif;
+  font-weight: 400;
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--text-primary);
+  background-color: var(--bg-color);
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease;
+}
+
+.portfolio-theme {
+  background-size:
+    100% 100%,
+    7px 7px;
+  background-image:
+    radial-gradient(circle at 8% 12%, var(--spotlight-color), transparent 30%),
+    repeating-linear-gradient(
+      45deg,
+      hsla(var(--p-500-code), 0.08) 0,
+      hsla(var(--p-700-code), 0.08) 0.7000000000000001px,
+      transparent 0,
+      transparent 50%
+    );
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Sections are managed via Tailwind classes in components */
+section {
+  position: relative;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1536px;
+  padding: 0 2rem;
+}
+
+.section__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.section__title {
+  font-size: var(--h1-font-size);
+  line-height: var(--h1-line-height);
+  font-weight: bold;
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+.section__description {
+  text-align: center;
+  max-width: 65ch;
+  color: var(--text-tertiary);
+}
+
+.site-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 22px;
+  margin-bottom: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.site-menu {
+  position: sticky;
+  top: 10px;
+  z-index: 30;
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 6px;
+  margin-bottom: 18px;
+  padding: 0.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--control-border);
+  background: hsla(var(--p-950-code), 0.44);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 16px 30px -24px var(--shadow-color);
+  width: fit-content;
+}
+
+.menu-link {
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  color: var(--text-secondary);
+  font-size: var(--caption-font-size);
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.menu-link:hover {
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+.menu-link.active {
+  color: #ffffff;
+  background: var(--main-gradient-color);
+  border-color: transparent;
+}
+
+.control-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem;
+  border-radius: 999px;
+  background: var(--control-bg);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--control-border);
+  box-shadow:
+    0 10px 20px -14px var(--shadow-color),
+    inset 0 0 0 1px hsla(var(--p-500-code), 0.15);
+}
+
+.control-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.06rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  padding-left: 0.4rem;
+}
+
+.control-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.85rem;
+  background: var(--surface-color);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: var(--caption-font-size);
+  font-family: inherit;
+  font-weight: 600;
+  transition:
+    border-color 0.25s ease,
+    transform 0.2s ease,
+    background-color 0.25s ease;
+}
+
+.control-button:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+}
+
+.back-to-top {
+  position: fixed;
+  right: 18px;
+  bottom: 20px;
+  z-index: 40;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--surface-color);
+  color: var(--text-primary);
+  font-size: var(--caption-font-size);
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease,
+    border-color 0.2s ease;
+}
+.back-to-top.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
