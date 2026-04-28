@@ -13,8 +13,15 @@ const PAGE_LABELS: Record<string, string> = {
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
+  const [isApiLoading, setIsApiLoading] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
+
+  useEffect(() => {
+    const handleLoading = (e: any) => setIsApiLoading(e.detail)
+    window.addEventListener('api-loading' as any, handleLoading)
+    return () => window.removeEventListener('api-loading' as any, handleLoading)
+  }, [])
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -60,7 +67,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pageLabel = PAGE_LABELS[pathname] ?? "Trang"
 
   return (
-    <SidebarProvider className="h-dvh overflow-hidden">
+    <SidebarProvider className="h-dvh overflow-hidden relative">
+      {/* API Progress Bar */}
+      <div 
+        className={`fixed top-0 left-0 h-[3px] bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-700 z-[9999] transition-all duration-500 ease-out ${isApiLoading ? 'w-full opacity-100' : 'w-0 opacity-0'}`}
+      />
       <AppSidebar />
 
       <SidebarInset

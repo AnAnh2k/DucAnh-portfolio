@@ -32,9 +32,11 @@ export default function ProjectsPage() {
 
   const fetchProjects = async () => {
     setLoading(true)
+    window.dispatchEvent(new CustomEvent('api-loading', { detail: true }))
     const { data } = await supabase.from("projects").select("*").order("created_at", { ascending: false })
     if (data) setProjects(data)
     setLoading(false)
+    window.dispatchEvent(new CustomEvent('api-loading', { detail: false }))
   }
 
   const resetForm = () => {
@@ -63,7 +65,7 @@ export default function ProjectsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-
+    window.dispatchEvent(new CustomEvent('api-loading', { detail: true }))
     try {
       let imageUrl = editingProject ? editingProject.image_url : ""
 
@@ -113,8 +115,10 @@ export default function ProjectsPage() {
       fetchProjects()
     } catch (error: any) {
       toast.error("Lỗi: " + error.message)
+      window.dispatchEvent(new CustomEvent('api-loading', { detail: false }))
     } finally {
       setIsSubmitting(false)
+      window.dispatchEvent(new CustomEvent('api-loading', { detail: false }))
     }
   }
 

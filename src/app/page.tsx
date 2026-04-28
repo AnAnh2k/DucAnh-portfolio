@@ -14,10 +14,26 @@ export default function Portfolio() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
+  const [activeSection, setActiveSection] = useState("AboutSection");
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [isApiLoading, setIsApiLoading] = useState(false);
 
   useEffect(() => {
-    fetchProjects();
-    incrementVisitor();
+    const init = async () => {
+      setIsApiLoading(true);
+      await fetchProjects();
+      await incrementVisitor();
+      
+      // Artificial delay for better "icon" experience as requested
+      setTimeout(() => {
+        setInitialLoading(false);
+        setIsApiLoading(false);
+      }, 1500);
+    };
+
+    init();
+    
+    // Back to top visibility
     const onScroll = () => {
       const el = document.querySelector(".back-to-top") as HTMLElement | null;
       if (!el) return;
@@ -25,7 +41,33 @@ export default function Portfolio() {
       else el.classList.remove("show");
     };
     window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+
+    // Scroll Spy Logic
+    const sections = ["AboutSection", "SkillsSection", "ProjectContainer", "ContactSection"];
+    const observerOptions = {
+      root: null,
+      rootMargin: "-20% 0px -70% 0px",
+      threshold: 0
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      observer.disconnect();
+    };
   }, []);
 
   const fetchProjects = async () => {
@@ -55,6 +97,7 @@ export default function Portfolio() {
   const handleContact = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSending(true);
+    setIsApiLoading(true);
     const { error } = await supabase
       .from("contacts")
       .insert([{ name, email, message }]);
@@ -67,43 +110,70 @@ export default function Portfolio() {
       setMessage("");
     }
     setIsSending(false);
+    setIsApiLoading(false);
   };
 
   return (
     <>
+      {/* API Progress Bar at the very top */}
+      <div 
+        className={`fixed top-0 left-0 h-[3px] bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 z-[999] transition-all duration-500 ease-out ${isApiLoading ? 'w-full opacity-100' : 'w-0 opacity-0'}`}
+      />
+
+      {/* Initial Loading Screen */}
+      {initialLoading && (
+        <div className="fixed inset-0 z-[1000] bg-slate-950 flex flex-col items-center justify-center p-6 text-center animate-in fade-in duration-500">
+          <div className="relative mb-8">
+            <div className="w-24 h-24 rounded-3xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-5xl animate-bounce">
+              ✨
+            </div>
+            <div className="absolute inset-0 rounded-3xl bg-blue-500/20 blur-2xl animate-pulse" />
+          </div>
+          
+          <h2 className="text-2xl font-bold text-slate-100 mb-2">Đang khởi tạo Portfolio...</h2>
+          <p className="text-slate-400 mb-8 max-w-xs leading-relaxed">
+            Chờ Đức Anh một chút xíu nhé, dữ liệu đang được tải về từ hệ thống. 🚀
+          </p>
+          
+          <div className="w-64 h-1.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+            <div className="h-full bg-gradient-to-r from-blue-500 to-emerald-400 animate-progress-loading" />
+          </div>
+        </div>
+      )}
+
       {/* Background gradients */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/20 blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-600/20 blur-[120px]" />
       </div>
 
-      <div className="portfolio-theme min-h-dvh flex flex-col bg-slate-950 text-slate-100 font-sans scroll-smooth selection:bg-blue-500/30 relative z-10 overflow-x-hidden">
+      <div className="portfolio-theme min-h-dvh flex flex-col bg-slate-950 text-slate-100 font-sans scroll-smooth selection:bg-blue-500/30 relative z-10">
         {/* Navigation */}
-        <nav className="site-menu container" aria-label="Primary">
+        <nav className="site-menu fixed top-6 left-1/2 -translate-x-1/2 w-fit mx-auto z-[100]" aria-label="Primary">
           <a
             href="#AboutSection"
-            className="menu-link active"
+            className={`menu-link ${activeSection === "AboutSection" ? "active" : ""}`}
             data-section="AboutSection"
           >
             Giới thiệu
           </a>
           <a
             href="#SkillsSection"
-            className="menu-link"
+            className={`menu-link ${activeSection === "SkillsSection" ? "active" : ""}`}
             data-section="SkillsSection"
           >
             Kỹ năng
           </a>
           <a
             href="#ProjectContainer"
-            className="menu-link"
+            className={`menu-link ${activeSection === "ProjectContainer" ? "active" : ""}`}
             data-section="ProjectContainer"
           >
             Dự án
           </a>
           <a
             href="#ContactSection"
-            className="menu-link"
+            className={`menu-link ${activeSection === "ContactSection" ? "active" : ""}`}
             data-section="ContactSection"
           >
             Liên hệ
@@ -458,77 +528,88 @@ export default function Portfolio() {
           </section>
 
           {/* Projects Section */}
-          <section id="ProjectContainer" className="py-24 space-y-12">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-              <div className="space-y-4">
-                <h3 className="text-3xl md:text-5xl font-black text-slate-100 uppercase tracking-tight">
-                  Dự án
-                </h3>
-                <p className="text-slate-400 text-lg">
-                  Những sản phẩm mình đã hoàn thiện
+          <section className="py-24" id="ProjectContainer">
+            <div className="max-w-6xl mx-auto px-6 space-y-16">
+              <div className="text-center space-y-4">
+                <h2 className="text-3xl md:text-5xl font-black text-slate-100 uppercase tracking-tight">Dự Án Nổi Bật</h2>
+                <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+                  Các dự án thể hiện rõ định hướng Frontend và Fullstack, khả năng triển
+                  khai từ giao diện, tích hợp API và tối ưu trải nghiệm người dùng.
                 </p>
               </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {projects.map((project) => (
-                <div
-                  key={project.id}
-                  className="group relative rounded-2xl border border-slate-800 bg-slate-900/40 overflow-hidden hover:border-slate-700 transition-all hover:shadow-2xl hover:shadow-blue-500/10 flex flex-col h-full"
-                >
-                  <div className="aspect-video overflow-hidden">
-                    {project.image_url ? (
-                      <img
-                        src={project.image_url}
-                        alt={project.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-slate-800 flex items-center justify-center">
-                        <Code className="w-10 h-10 text-slate-700" />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {projects.map((project) => (
+                  <article key={project.id} className="flex flex-col bg-slate-900/40 border border-slate-800 rounded-[24px] overflow-hidden hover:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/10 group h-full">
+                    <div className="p-4 bg-slate-800/30">
+                      <div className="aspect-video rounded-2xl overflow-hidden border border-slate-700/50 relative">
+                        {project.image_url ? (
+                          <img
+                            src={project.image_url}
+                            alt={project.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-slate-800 flex items-center justify-center">
+                            <Code className="w-10 h-10 text-slate-700" />
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                  <div className="p-6 space-y-4 flex flex-col flex-1">
-                    <div className="space-y-2 flex-1">
-                      <h4 className="text-xl font-bold text-slate-100 group-hover:text-blue-400 transition-colors uppercase tracking-tight">
-                        {project.title}
-                      </h4>
-                      <p className="text-slate-400 text-sm line-clamp-3 leading-relaxed">
-                        {project.description}
-                      </p>
                     </div>
-                    <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-800/50">
-                      {project.demo_url && (
-                        <a
-                          href={project.demo_url}
-                          target="_blank"
-                          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white text-xs font-bold hover:bg-blue-500 transition-colors"
-                        >
-                          Demo <ExternalLink className="w-3 h-3" />
-                        </a>
+
+                    <div className="p-6 flex flex-col flex-1 space-y-4">
+                      <div className="space-y-2 flex-1">
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-400">
+                          {project.category || "Personal Project"}
+                        </h4>
+                        <h3 className="text-xl font-bold text-slate-100 group-hover:text-blue-400 transition-colors line-clamp-1">{project.title}</h3>
+                        <p className="text-slate-400 text-sm line-clamp-3 leading-relaxed">
+                          {project.description}
+                        </p>
+                      </div>
+
+                      {/* Project Stack from DB */}
+                      {project.tech_stack && (
+                        <div className="pt-4 border-t border-slate-800/50 flex flex-wrap gap-2 text-[11px] font-bold text-slate-500">
+                          {project.tech_stack.split(',').map((tag: string) => (
+                            <span key={tag.trim()}>#{tag.trim()}</span>
+                          ))}
+                        </div>
                       )}
-                      {project.github_url && (
-                        <a
-                          href={project.github_url}
-                          target="_blank"
-                          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 text-slate-200 text-xs font-bold hover:bg-slate-700 transition-colors"
-                        >
-                          Code <Code className="w-3 h-3" />
-                        </a>
-                      )}
+
+                      <div className="flex gap-3 pt-2">
+                        {project.demo_url && (
+                          <a
+                            href={project.demo_url}
+                            target="_blank"
+                            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold hover:shadow-[0_0_20px_rgba(37,99,235,0.4)] transition-all active:scale-95"
+                          >
+                            Xem Demo <ExternalLink className="w-3.5 h-3.5" />
+                          </a>
+                        )}
+                        {project.repo_url && (
+                          <a
+                            href={project.repo_url}
+                            target="_blank"
+                            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-slate-800 border border-slate-700 text-slate-200 text-xs font-bold hover:bg-slate-700 transition-all active:scale-95"
+                          >
+                            Mã nguồn <Code className="w-3.5 h-3.5" />
+                          </a>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
+                  </article>
+                ))}
+              </div>
             </div>
           </section>
 
           {/* Contact Section */}
           <section
             id="ContactSection"
-            className="max-w-4xl mx-auto w-full pt-24 pb-12"
+            className="max-w-4xl mx-auto w-full pt-24 pb-12 px-6"
           >
-            <div className="rounded-3xl bg-gradient-to-br from-slate-900/80 to-slate-950 border border-slate-800 p-8 md:p-12 shadow-2xl relative overflow-hidden group">
+            <div className="rounded-[32px] bg-gradient-to-br from-slate-900/80 to-slate-950 border border-slate-800 p-8 md:p-12 shadow-2xl relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 blur-[80px] -mr-32 -mt-32" />
               <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div className="space-y-8">

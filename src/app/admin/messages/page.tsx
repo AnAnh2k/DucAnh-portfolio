@@ -23,17 +23,21 @@ export default function MessagesPage() {
 
   const fetchMessages = async () => {
     setLoading(true)
+    window.dispatchEvent(new CustomEvent('api-loading', { detail: true }))
     const { data } = await supabase.from("contacts").select("*").order("created_at", { ascending: false })
     if (data) setContacts(data)
     setLoading(false)
+    window.dispatchEvent(new CustomEvent('api-loading', { detail: false }))
   }
 
   const handleDelete = async (e: React.MouseEvent, id: string) => {
     e.stopPropagation()
     if (!confirm("Xóa tin nhắn này?")) return
+    window.dispatchEvent(new CustomEvent('api-loading', { detail: true }))
     const { error } = await supabase.from("contacts").delete().eq("id", id)
     if (error) {
       toast.error("Lỗi: " + error.message)
+      window.dispatchEvent(new CustomEvent('api-loading', { detail: false }))
     } else {
       toast.success("Đã xóa tin nhắn")
       if (selectedId === id) setSelectedId(null)
@@ -43,6 +47,7 @@ export default function MessagesPage() {
 
   const handleToggleRead = async (e: React.MouseEvent, id: string, currentStatus: boolean) => {
     e.stopPropagation()
+    window.dispatchEvent(new CustomEvent('api-loading', { detail: true }))
     const { error } = await supabase
       .from("contacts")
       .update({ is_read: !currentStatus })
@@ -51,6 +56,7 @@ export default function MessagesPage() {
     if (error) {
       console.error("Supabase Error:", error)
       toast.error("Lỗi: " + error.message)
+      window.dispatchEvent(new CustomEvent('api-loading', { detail: false }))
     } else {
       toast.success(currentStatus ? "Đã đánh dấu là chưa đọc" : "Đã đánh dấu là đã đọc")
       // Dispatch custom event to notify sidebar
