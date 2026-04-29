@@ -1,7 +1,8 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { supabase } from "@/lib/supabase"
-import { Users, BarChart3, CalendarDays, Globe } from "lucide-react"
+import { Users, BarChart3, CalendarDays, Globe, ChevronUp, ChevronDown } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | "floating" }) {
   const [stats, setStats] = useState({
@@ -10,6 +11,8 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
     month: 0,
     total: 0
   })
+  const [isExpanded, setIsExpanded] = useState(false)
+  const cardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     // 1. Theo dõi Online Realtime bằng Presence
@@ -35,18 +38,15 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
 
     // 2. Lấy thống kê từ Database
     const fetchStats = async () => {
-      // Ghi log truy cập mới (chỉ một lần mỗi session)
       if (!sessionStorage.getItem('visited')) {
         await supabase.from('visitor_logs').insert([{}])
         sessionStorage.setItem('visited', 'true')
       }
 
-      // Lấy tổng số truy cập
       const { count: total } = await supabase
         .from('visitor_logs')
         .select('*', { count: 'exact', head: true })
 
-      // Lấy số truy cập hôm nay
       const todayStart = new Date()
       todayStart.setHours(0, 0, 0, 0)
       const { count: today } = await supabase
@@ -54,7 +54,6 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
         .select('*', { count: 'exact', head: true })
         .gte('created_at', todayStart.toISOString())
 
-      // Lấy số truy cập tháng này
       const monthStart = new Date()
       monthStart.setDate(1)
       monthStart.setHours(0, 0, 0, 0)
@@ -73,34 +72,92 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
 
     fetchStats()
 
+    // Đóng khi click ngoài
+    const handleClickOutside = (event: MouseEvent) => {
+      if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
+        setIsExpanded(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+
     return () => {
       supabase.removeChannel(channel)
+      document.removeEventListener("mousedown", handleClickOutside)
     }
   }, [])
 
   if (variant === "floating") {
     return (
-      <div className="fixed top-10 right-6 z-[150] group hidden lg:block">
-        <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-2xl p-3 shadow-2xl shadow-black/20 w-44 transition-all duration-500 hover:scale-105 hover:border-white/20 animate-in fade-in slide-in-from-top-4">
-          <div className="flex items-center gap-2 mb-3 border-b border-white/5 pb-2">
-            <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-            <span className="text-[9px] font-black text-white/50 uppercase tracking-[0.2em]">Live Traffic</span>
-          </div>
+      <div 
+        ref={cardRef}
+        className={cn(
+          "fixed top-6 left-6 z-[150] transition-all duration-500 ease-out",
+          isExpanded ? "w-64" : "w-auto"
+        )}
+      >
+        <div 
+          onClick={() => setIsExpanded(!isExpanded)}
+          className={cn(
+            "bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-full cursor-pointer shadow-2xl transition-all duration-300 hover:border-white/20 active:scale-95",
+            isExpanded ? "rounded-3xl p-6" : "px-4 h-12 flex items-center gap-3"
+          )}
+        >
+          {/* Collapsed View */}
+          {!isExpanded ? (
+            <>
+              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">Online</span>
+                <span className="text-sm font-black text-emerald-400 leading-none">{stats.online}</span>
+              </div>
+              <ChevronDown className="w-3 h-3 text-white/20 group-hover:text-white/50 transition-colors" />
+            </>
+          ) : (
+            /* Expanded View */
+            <div className="w-full space-y-4 animate-in fade-in zoom-in-95 duration-300">
+              <div className="flex items-center justify-between border-b border-white/5 pb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                  <span className="text-xs font-black text-white uppercase tracking-widest italic">Thống kê truy cập</span>
+                </div>
+                <ChevronUp className="w-4 h-4 text-white/30" />
+              </div>
 
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold text-white/30 uppercase tracking-wider">Online</span>
-              <span className="text-[13px] font-black text-emerald-400 leading-none">{stats.online}</span>
+              <div className="grid grid-cols-1 gap-3">
+                <div className="flex items-center justify-between p-2 rounded-xl bg-white/5">
+                  <div className="flex items-center gap-2">
+                    <Globe className="w-3.5 h-3.5 text-emerald-400" />
+                    <span className="text-[10px] font-bold text-white/40 uppercase">Đang Online</span>
+                  </div>
+                  <span className="text-sm font-black text-emerald-400">{stats.online}</span>
+                </div>
+
+                <div className="flex items-center justify-between p-2 rounded-xl bg-white/5">
+                  <div className="flex items-center gap-2">
+                    <BarChart3 className="w-3.5 h-3.5 text-blue-400" />
+                    <span className="text-[10px] font-bold text-white/40 uppercase">Hôm nay</span>
+                  </div>
+                  <span className="text-sm font-black text-white">{stats.today.toLocaleString()}</span>
+                </div>
+
+                <div className="flex items-center justify-between p-2 rounded-xl bg-white/5">
+                  <div className="flex items-center gap-2">
+                    <CalendarDays className="w-3.5 h-3.5 text-purple-400" />
+                    <span className="text-[10px] font-bold text-white/40 uppercase">Tháng này</span>
+                  </div>
+                  <span className="text-sm font-black text-white">{stats.month.toLocaleString()}</span>
+                </div>
+
+                <div className="flex items-center justify-between p-2 rounded-xl bg-white/5">
+                  <div className="flex items-center gap-2">
+                    <Users className="w-3.5 h-3.5 text-orange-400" />
+                    <span className="text-[10px] font-bold text-white/40 uppercase">Tổng cộng</span>
+                  </div>
+                  <span className="text-sm font-black text-white">{stats.total.toLocaleString()}</span>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold text-white/30 uppercase tracking-wider">Today</span>
-              <span className="text-[13px] font-black text-white/90 leading-none">{stats.today.toLocaleString()}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold text-white/30 uppercase tracking-wider">Total</span>
-              <span className="text-[13px] font-black text-white/90 leading-none">{stats.total.toLocaleString()}</span>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     )
@@ -108,6 +165,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      {/* ... (phần inline giữ nguyên) */}
       <div className="bg-slate-900/50 border border-slate-800 p-4 rounded-2xl flex flex-col items-center gap-1">
         <div className="flex items-center gap-2 text-emerald-400 mb-1">
           <Globe className="w-4 h-4 animate-pulse" />
