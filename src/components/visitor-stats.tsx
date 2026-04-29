@@ -80,7 +80,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
 
   if (variant === "floating") {
     return (
-      <div className="absolute top-10 right-6 z-[50] group hidden lg:block">
+      <div className="fixed top-10 right-6 z-[150] group hidden lg:block">
         <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-2xl p-3 shadow-2xl shadow-black/20 w-44 transition-all duration-500 hover:scale-105 hover:border-white/20 animate-in fade-in slide-in-from-top-4">
           <div className="flex items-center gap-2 mb-3 border-b border-white/5 pb-2">
             <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
@@ -98,7 +98,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
             </div>
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-bold text-white/30 uppercase tracking-wider">Total</span>
-              <span className="text-[13px] font-black text-blue-400 leading-none">{stats.total.toLocaleString()}</span>
+              <span className="text-[13px] font-black text-white/90 leading-none">{stats.total.toLocaleString()}</span>
             </div>
           </div>
         </div>
@@ -107,28 +107,37 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
   }
 
   return (
-    <div className="w-full bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden">
-      <div className="px-6 py-5 border-b border-slate-50 flex items-center justify-center bg-slate-50/30">
-        <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest">Thống kê truy cập</h3>
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="bg-slate-900/50 border border-slate-800 p-4 rounded-2xl flex flex-col items-center gap-1">
+        <div className="flex items-center gap-2 text-emerald-400 mb-1">
+          <Globe className="w-4 h-4 animate-pulse" />
+          <span className="text-xs font-bold uppercase tracking-widest">Online</span>
+        </div>
+        <span className="text-2xl font-black text-white leading-none">{stats.online}</span>
       </div>
-      <div className="p-6 space-y-4">
-        <div className="bg-slate-50 rounded-2xl p-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-            <span className="text-xs font-bold text-slate-500">ĐANG ONLINE</span>
-          </div>
-          <span className="text-lg font-black text-slate-900">{stats.online}</span>
+      
+      <div className="bg-slate-900/50 border border-slate-800 p-4 rounded-2xl flex flex-col items-center gap-1">
+        <div className="flex items-center gap-2 text-blue-400 mb-1">
+          <BarChart3 className="w-4 h-4" />
+          <span className="text-xs font-bold uppercase tracking-widest">Hôm nay</span>
         </div>
-        <div className="space-y-3 px-1">
-          <div className="flex items-center justify-between text-slate-500">
-            <span className="text-xs font-bold uppercase tracking-wider">Hôm nay</span>
-            <span className="text-sm font-black text-slate-800">{stats.today.toLocaleString()}</span>
-          </div>
-          <div className="flex items-center justify-between text-slate-500">
-            <span className="text-xs font-bold uppercase tracking-wider">Tổng cộng</span>
-            <span className="text-sm font-black text-blue-600">{stats.total.toLocaleString()}</span>
-          </div>
+        <span className="text-2xl font-black text-white leading-none">{stats.today.toLocaleString()}</span>
+      </div>
+
+      <div className="bg-slate-900/50 border border-slate-800 p-4 rounded-2xl flex flex-col items-center gap-1">
+        <div className="flex items-center gap-2 text-purple-400 mb-1">
+          <CalendarDays className="w-4 h-4" />
+          <span className="text-xs font-bold uppercase tracking-widest">Tháng này</span>
         </div>
+        <span className="text-2xl font-black text-white leading-none">{stats.month.toLocaleString()}</span>
+      </div>
+
+      <div className="bg-slate-900/50 border border-slate-800 p-4 rounded-2xl flex flex-col items-center gap-1">
+        <div className="flex items-center gap-2 text-orange-400 mb-1">
+          <Users className="w-4 h-4" />
+          <span className="text-xs font-bold uppercase tracking-widest">Tổng cộng</span>
+        </div>
+        <span className="text-2xl font-black text-white leading-none">{stats.total.toLocaleString()}</span>
       </div>
     </div>
   )

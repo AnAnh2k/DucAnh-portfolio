@@ -28,7 +28,7 @@
     justify-content: center;
   }
   .site-menu {
-    position: static;
+    position: fixed;
     margin: 4px auto 16px;
     width: 100%;
     max-width: 720px;
@@ -96,8 +96,8 @@
     scroll-snap-type: x proximity;
     justify-content: flex-start;
     -webkit-overflow-scrolling: touch;
-    position: sticky;
-    top: 8px;
+    position: fixed;
+    top: 6px;
     z-index: 35;
     background: hsla(var(--p-950-code), 0.72);
     backdrop-filter: blur(10px);
