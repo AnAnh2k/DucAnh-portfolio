@@ -85,7 +85,7 @@ export default function AdminDashboard() {
     <div className="space-y-6 animate-in fade-in duration-300" style={{ fontFamily: "'Segoe UI', system-ui, sans-serif" }}>
 
       {/* ── 4 STAT CARDS ── */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         {cards.map((c) => (
           <div key={c.key} className="bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow cursor-default">
             {/* icon left  +  labels right */}
@@ -132,7 +132,7 @@ export default function AdminDashboard() {
               </div>
             </div>
             
-            <div className="h-[300px] w-full">
+            <div className="h-[250px] sm:h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={chartData}>
                   <defs>

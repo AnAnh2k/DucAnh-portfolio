@@ -45,8 +45,13 @@
   border: 1px solid var(--border-color);
   border-radius: 24px;
   background-color: var(--surface-color);
-  padding: 2rem 2rem;
+  padding: 1.5rem;
   box-shadow: 0 20px 28px -28px var(--shadow-color);
+}
+@media (max-width: 640px) {
+  .skills__grid_item {
+    padding: 1.25rem;
+  }
 }
 .skills__grid_item:nth-child(1) {
   border: none;
@@ -123,7 +128,8 @@
 }
 .skills__grid_item:nth-child(3) .softSkills_badge {
   height: 36px;
-  width: 244px;
+  width: 100%;
+  max-width: 244px;
   border: 1px solid var(--border-color);
   border-radius: 24px;
   background-color: var(--surface-raised);
@@ -219,6 +225,7 @@
   }
 
   .skills__grid_item:nth-child(2) .icon-badges {
-    width: 10.5em;
+    width: 9em;
+    gap: 0.8em;
   }
 }
