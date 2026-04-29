@@ -1,0 +1,16 @@
+{
+  "name": "An Đức Anh Portfolio",
+  "short_name": "ducanhdev",
+  "description": "Fullstack Web Developer Portfolio - An Đức Anh",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

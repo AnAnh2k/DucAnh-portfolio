@@ -12,8 +12,37 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "An Duc Anh - Portfolio",
-  description: "Frontend Developer Portfolio",
+  title: {
+    default: "An Đức Anh | Fullstack Web Developer",
+    template: "%s | An Đức Anh",
+  },
+  description: "Portfolio cá nhân của An Đức Anh (ducanhdev) - Fullstack Web Developer. Chuyên thiết kế và phát triển ứng dụng web hiện đại với React, Next.js và Node.js.",
+  keywords: ["ducanhdev", "An Đức Anh", "Fullstack Developer", "Next.js", "Portfolio", "Web Developer Vietnam", "duc anh dev", "software engineer"],
+  authors: [{ name: "An Đức Anh", url: "https://ducanhdev.io.vn" }],
+  creator: "An Đức Anh",
+  metadataBase: new URL("https://ducanhdev.io.vn"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "An Đức Anh | Fullstack Web Developer",
+    description: "Khám phá các dự án và kỹ năng của An Đức Anh - Fullstack Developer chuyên nghiệp.",
+    url: "https://ducanhdev.io.vn",
+    siteName: "An Đức Anh Portfolio",
+    locale: "vi_VN",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "An Đức Anh | Fullstack Web Developer",
+    description: "Portfolio của An Đức Anh - Fullstack Developer chuyên nghiệp.",
+    creator: "@AnAnh2k",
+  },
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
