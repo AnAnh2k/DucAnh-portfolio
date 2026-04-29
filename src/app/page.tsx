@@ -252,6 +252,28 @@ export default function Portfolio() {
           </Sheet>
         </div>
 
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              "name": "An Đức Anh",
+              "url": "https://ducanhdev.io.vn",
+              "jobTitle": "Fullstack Web Developer",
+              "alumniOf": "Đại học Công nghệ Giao thông vận tải",
+              "sameAs": [
+                "https://github.com/AnAnh2k",
+                "https://facebook.com/ducanh.trinh.2108"
+              ],
+              "brand": {
+                "@type": "Brand",
+                "name": "ducanhdev"
+              }
+            })
+          }}
+        />
+
         <main className="flex-1 relative z-10 w-full max-w-6xl mx-auto px-6 pt-10 md:pt-12">
           {/* Hero Section */}
           <section
@@ -265,14 +287,14 @@ export default function Portfolio() {
                 </span>
                 Available for work
               </div>
-              <h2 className="font-extrabold tracking-tight leading-[1.1] text-slate-100">
+              <h1 className="font-extrabold tracking-tight leading-[1.1] text-slate-100">
                 <span className="text-xl sm:text-2xl md:text-3xl block mb-3 font-medium text-slate-400">
-                  xin chào, mình là
+                  xin chào, mình là <span className="text-blue-400">ducanhdev</span>
                 </span>
                 <span className="text-4xl sm:text-6xl md:text-7xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
                   An Đức Anh
                 </span>
-              </h2>
+              </h1>
               <p className="text-base sm:text-lg md:text-xl text-slate-400 max-w-xl mx-auto md:mx-0 leading-relaxed font-medium">
                 Mình sinh năm <span className="text-slate-100 font-bold">2004</span>, 
                 hiện tại mình là <span className="text-slate-100 font-bold">sinh viên năm cuối</span> mong muốn 
