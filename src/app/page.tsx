@@ -200,14 +200,12 @@ export default function Portfolio() {
         {/* Mobile Navigation */}
         <div className="md:hidden fixed top-6 right-6 z-[100]">
           <Sheet>
-            <SheetTrigger asChild>
-              <Button className="rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-800 text-white px-5 h-12 shadow-xl flex items-center gap-3 transition-all active:scale-95 group">
-                <span className="text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-blue-400 transition-colors animate-in fade-in slide-in-from-right-2" key={activeSection}>
-                  {SECTION_LABELS[activeSection] || "MENU"}
-                </span>
-                <div className="w-px h-4 bg-slate-800 group-hover:bg-blue-500/50 transition-colors" />
-                <Menu className="w-5 h-5 group-hover:text-blue-400 transition-colors" />
-              </Button>
+            <SheetTrigger className="rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-800 text-white px-5 h-12 shadow-xl flex items-center gap-3 transition-all active:scale-95 group cursor-pointer outline-none">
+              <span className="text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-blue-400 transition-colors animate-in fade-in slide-in-from-right-2" key={activeSection}>
+                {SECTION_LABELS[activeSection] || "MENU"}
+              </span>
+              <div className="w-px h-4 bg-slate-800 group-hover:bg-blue-500/50 transition-colors" />
+              <Menu className="w-5 h-5 group-hover:text-blue-400 transition-colors" />
             </SheetTrigger>
             <SheetContent side="right" className="bg-slate-950/95 border-slate-800 p-0 w-80">
               <SheetHeader className="p-8 border-b border-slate-900">
