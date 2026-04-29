@@ -51,7 +51,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
       try {
         // Ghi log truy cập mới (chỉ một lần mỗi session)
         if (!sessionStorage.getItem('visited')) {
-          const { error: insertError } = await supabase.from('visitor_logs').insert([{}])
+          const { error: insertError } = await supabase.from('visitors').insert([{}])
           if (insertError) {
             console.error("Insert error:", insertError)
             // Nếu lỗi RLS, chúng ta vẫn tiếp tục để lấy số liệu cũ
@@ -62,7 +62,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
 
         // Lấy tổng số truy cập
         const { count: total, error: totalError } = await supabase
-          .from('visitor_logs')
+          .from('visitors')
           .select('*', { count: 'exact', head: true })
 
         if (totalError) throw totalError
@@ -71,7 +71,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
         const todayStart = new Date()
         todayStart.setHours(0, 0, 0, 0)
         const { count: today } = await supabase
-          .from('visitor_logs')
+          .from('visitors')
           .select('*', { count: 'exact', head: true })
           .gte('created_at', todayStart.toISOString())
 
@@ -80,7 +80,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
         monthStart.setDate(1)
         monthStart.setHours(0, 0, 0, 0)
         const { count: month } = await supabase
-          .from('visitor_logs')
+          .from('visitors')
           .select('*', { count: 'exact', head: true })
           .gte('created_at', monthStart.toISOString())
 
