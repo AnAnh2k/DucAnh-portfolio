@@ -220,21 +220,24 @@ export default function Portfolio() {
                   { id: "ProjectContainer", label: "Dự án" },
                   { id: "ContactSection", label: "Liên hệ" }
                 ].map((item) => (
-                  <SheetClose asChild key={item.id}>
-                    <a
-                      href={`#${item.id}`}
-                      className={`flex items-center justify-between p-4 rounded-2xl text-lg font-bold transition-all ${
-                        activeSection === item.id 
-                          ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20" 
-                          : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
-                      }`}
-                    >
-                      <span>{item.label}</span>
-                      {activeSection === item.id && (
-                        <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                      )}
-                    </a>
-                  </SheetClose>
+                  <SheetClose 
+                    key={item.id}
+                    render={
+                      <a
+                        href={`#${item.id}`}
+                        className={`flex items-center justify-between p-4 rounded-2xl text-lg font-bold transition-all ${
+                          activeSection === item.id 
+                            ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20" 
+                            : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
+                        }`}
+                      >
+                        <span>{item.label}</span>
+                        {activeSection === item.id && (
+                          <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                        )}
+                      </a>
+                    }
+                  />
                 ))}
               </div>
               <div className="mt-auto p-8 border-t border-slate-900">
