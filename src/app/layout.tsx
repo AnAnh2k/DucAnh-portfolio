@@ -43,6 +43,9 @@ export const metadata: Metadata = {
     shortcut: "/icon.png",
     apple: "/icon.png",
   },
+  verification: {
+    google: "32b-IlTr3VWweqDo57tgv5SoSKny6dK4zn911wPBGtA",
+  },
 };
 
 export default function RootLayout({
