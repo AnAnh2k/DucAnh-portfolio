@@ -268,7 +268,7 @@ export default function Portfolio() {
               ],
               "brand": {
                 "@type": "Brand",
-                "name": "ducanhdev"
+                "name": "Đức Anh Developer"
               }
             })
           }}

@@ -13,11 +13,11 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "An Đức Anh | Fullstack Web Developer",
-    template: "%s | An Đức Anh",
+    default: "Đức Anh Developer | Fullstack Web Developer",
+    template: "%s | Đức Anh Developer",
   },
   description: "Portfolio cá nhân của An Đức Anh (ducanhdev) - Fullstack Web Developer. Chuyên thiết kế và phát triển ứng dụng web hiện đại với React, Next.js và Node.js.",
-  keywords: ["ducanhdev", "An Đức Anh", "Fullstack Developer", "Next.js", "Portfolio", "Web Developer Vietnam", "duc anh dev", "software engineer"],
+  keywords: ["ducanhdev", "Đức Anh Developer", "An Đức Anh", "Fullstack Developer", "Next.js", "Portfolio", "Web Developer Vietnam", "duc anh dev", "software engineer"],
   authors: [{ name: "An Đức Anh", url: "https://ducanhdev.io.vn" }],
   creator: "An Đức Anh",
   metadataBase: new URL("https://ducanhdev.io.vn"),
@@ -25,23 +25,23 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "An Đức Anh | Fullstack Web Developer",
+    title: "Đức Anh Developer | Fullstack Web Developer",
     description: "Khám phá các dự án và kỹ năng của An Đức Anh - Fullstack Developer chuyên nghiệp.",
     url: "https://ducanhdev.io.vn",
-    siteName: "An Đức Anh Portfolio",
+    siteName: "Đức Anh Developer Portfolio",
     locale: "vi_VN",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "An Đức Anh | Fullstack Web Developer",
+    title: "Đức Anh Developer | Fullstack Web Developer",
     description: "Portfolio của An Đức Anh - Fullstack Developer chuyên nghiệp.",
     creator: "@AnAnh2k",
   },
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
   },
 };
 
