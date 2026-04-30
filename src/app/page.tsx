@@ -695,90 +695,86 @@ export default function Portfolio() {
             </div>
           </section>
 
-          {/* Contact Section */}
-          <section
-            id="ContactSection"
-            className="max-w-4xl mx-auto w-full pt-24 pb-12 px-6"
-          >
-            <div className="rounded-[32px] bg-gradient-to-br from-slate-900/80 to-slate-950 border border-slate-800 p-8 md:p-12 shadow-2xl relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 blur-[80px] -mr-32 -mt-32" />
-              <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12">
-                <div className="space-y-8">
-                  <div className="space-y-4">
-                    <h3 className="text-3xl md:text-4xl font-black text-slate-100 uppercase tracking-tight">
-                      Liên hệ
-                    </h3>
-                    <p className="text-slate-400 leading-relaxed">
-                      Sẵn sàng hợp tác và cùng tạo nên những sản phẩm chất
-                      lượng.
-                    </p>
+          <section id="ContactSection" className="py-24 border-t border-slate-900 mb-20">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-6xl mx-auto px-6">
+              <div className="space-y-8">
+                <div>
+                  <h2 className="text-3xl md:text-5xl font-black text-white mb-6 italic tracking-tighter uppercase">Bắt Đầu <span className="text-blue-500">Kết Nối</span></h2>
+                  <p className="text-slate-400 text-lg font-medium leading-relaxed">
+                    Đức Anh luôn sẵn sàng lắng nghe những ý tưởng mới và cơ hội hợp tác. Đừng ngần ngại để lại lời nhắn!
+                  </p>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="flex items-center gap-6 p-6 rounded-[32px] bg-slate-900/40 border border-slate-800 group hover:border-blue-500/30 transition-all">
+                    <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+                      <Mail className="w-7 h-7" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">Email của mình</p>
+                      <a href="mailto:anducanh.work@gmail.com" className="text-lg font-black text-white hover:text-blue-400 transition-colors tracking-tight">anducanh.work@gmail.com</a>
+                    </div>
                   </div>
-                  <div className="space-y-6">
-                    <div className="flex items-center gap-4 group/item">
-                      <div className="w-12 h-12 rounded-2xl bg-blue-600/10 flex items-center justify-center text-blue-400 group-hover/item:bg-blue-600 group-hover/item:text-white transition-all">
-                        <Mail className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <p className="text-xs font-black uppercase tracking-widest text-slate-500">
-                          Email
-                        </p>
-                        <p className="text-slate-200 font-bold">
-                          anducanh125@gmail.com
-                        </p>
+                  <div className="flex items-center gap-6 p-6 rounded-[32px] bg-slate-900/40 border border-slate-800 group hover:border-emerald-500/30 transition-all">
+                    <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+                      <ExternalLink className="w-7 h-7" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">Mạng xã hội</p>
+                      <div className="flex gap-4">
+                        <a href="https://facebook.com/ducanh.trinh.2108" target="_blank" className="text-lg font-black text-white hover:text-emerald-400 transition-colors tracking-tight">Facebook</a>
+                        <span className="text-slate-800">/</span>
+                        <a href="https://github.com/AnAnh2k" target="_blank" className="text-lg font-black text-white hover:text-emerald-400 transition-colors tracking-tight">GitHub</a>
                       </div>
                     </div>
                   </div>
                 </div>
-                <form onSubmit={handleContact} className="space-y-6">
-                  <div className="grid grid-cols-1 gap-6">
-                    <div className="space-y-3">
-                      <label className="text-sm font-semibold text-slate-300 ml-1">
-                        Họ tên của bạn
-                      </label>
+              </div>
+
+              <div className="p-8 md:p-12 rounded-[40px] bg-slate-900/60 border border-slate-800 shadow-2xl relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 blur-[80px]" />
+                <div className="relative z-10">
+                  <h3 className="text-2xl font-black text-white mb-8 italic">Gửi lời nhắn cho mình</h3>
+                  <form onSubmit={handleContact} className="space-y-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em] ml-2">Tên của bạn</label>
                       <Input
+                        placeholder="Nguyễn Văn A"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         required
-                        placeholder="Nguyễn Văn A"
-                        className="bg-slate-950/50 border-slate-800 h-14 text-slate-200 placeholder:text-slate-600 focus-visible:ring-blue-500/50 text-base rounded-xl"
+                        className="h-14 rounded-2xl bg-slate-950 border-slate-800 focus:border-blue-500 text-white transition-all px-6"
                       />
                     </div>
-                    <div className="space-y-3">
-                      <label className="text-sm font-semibold text-slate-300 ml-1">
-                        Email liên hệ
-                      </label>
+                    <div className="space-y-2">
+                      <label className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em] ml-2">Email liên hệ</label>
                       <Input
                         type="email"
+                        placeholder="name@example.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        placeholder="email@example.com"
-                        className="bg-slate-950/50 border-slate-800 h-14 text-slate-200 placeholder:text-slate-600 focus-visible:ring-blue-500/50 text-base rounded-xl"
+                        className="h-14 rounded-2xl bg-slate-950 border-slate-800 focus:border-blue-500 text-white transition-all px-6"
                       />
                     </div>
-                  </div>
-                  <div className="space-y-3">
-                    <label className="text-sm font-semibold text-slate-300 ml-1">
-                      Lời nhắn
-                    </label>
-                    <Textarea
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      required
-                      placeholder="Chào Đức Anh, tôi muốn trao đổi về..."
-                      rows={6}
-                      className="bg-slate-950/50 border-slate-800 resize-none text-slate-200 placeholder:text-slate-600 focus-visible:ring-blue-500/50 text-base rounded-xl p-4"
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    className="w-full h-14 bg-white text-slate-950 hover:bg-slate-200 font-bold text-lg rounded-xl transition-all active:scale-[0.98] shadow-[0_0_20px_rgba(255,255,255,0.1)]"
-                    disabled={isSending}
-                  >
-                    {isSending ? "Đang gửi..." : "Gửi tin nhắn ngay"}{" "}
-                    <Mail className="w-5 h-5 ml-2" />
-                  </Button>
-                </form>
+                    <div className="space-y-2">
+                      <label className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em] ml-2">Lời nhắn</label>
+                      <Textarea
+                        placeholder="Hãy nói về dự án của bạn..."
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        required
+                        className="min-h-[150px] rounded-[32px] bg-slate-950 border-slate-800 focus:border-blue-500 text-white transition-all p-6 resize-none"
+                      />
+                    </div>
+                    <Button 
+                      disabled={isSending} 
+                      className="w-full h-16 rounded-[24px] bg-white text-slate-950 hover:bg-slate-200 font-black text-lg transition-all active:scale-[0.98] shadow-xl"
+                    >
+                      {isSending ? "Đang gửi..." : "Gửi tin nhắn ngay"}
+                    </Button>
+                  </form>
+                </div>
               </div>
             </div>
           </section>
