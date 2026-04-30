@@ -38,7 +38,6 @@ export default function Portfolio() {
     const init = async () => {
       setIsApiLoading(true);
       await fetchProjects();
-      await incrementVisitor();
       
       // Artificial delay for better "icon" experience as requested
       setTimeout(() => {
@@ -94,21 +93,7 @@ export default function Portfolio() {
     if (data) setProjects(data);
   };
 
-  const incrementVisitor = async () => {
-    if (sessionStorage.getItem("visited")) return;
-    sessionStorage.setItem("visited", "true");
-    const { data } = await supabase
-      .from("visitors")
-      .select("count")
-      .eq("id", 1)
-      .single();
-    if (data) {
-      await supabase
-        .from("visitors")
-        .update({ count: data.count + 1 })
-        .eq("id", 1);
-    }
-  };
+
 
   const handleContact = async (e: React.FormEvent) => {
     e.preventDefault();

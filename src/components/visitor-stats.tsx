@@ -146,7 +146,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
                     <BarChart3 className="w-4 h-4 text-blue-400" />
                     <span className="text-[10px] font-bold text-white/50 uppercase tracking-tight">Hôm nay</span>
                   </div>
-                  <span className="text-sm font-black text-white">{stats.today || 1}</span>
+                  <span className="text-sm font-black text-white">{stats.today}</span>
                 </div>
 
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-white/5">
@@ -154,7 +154,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
                     <CalendarDays className="w-4 h-4 text-purple-400" />
                     <span className="text-[10px] font-bold text-white/50 uppercase tracking-tight">Tháng này</span>
                   </div>
-                  <span className="text-sm font-black text-white">{stats.month || 1}</span>
+                  <span className="text-sm font-black text-white">{stats.month}</span>
                 </div>
 
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-white/5">
@@ -187,7 +187,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
           <BarChart3 className="w-4 h-4" />
           <span className="text-xs font-bold uppercase tracking-widest">Hôm nay</span>
         </div>
-        <span className="text-2xl font-black text-white leading-none">{stats.today || 1}</span>
+        <span className="text-2xl font-black text-white leading-none">{stats.today}</span>
       </div>
 
       <div className="bg-slate-900/50 border border-slate-800 p-4 rounded-2xl flex flex-col items-center gap-1">
@@ -195,7 +195,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
           <CalendarDays className="w-4 h-4" />
           <span className="text-xs font-bold uppercase tracking-widest">Tháng này</span>
         </div>
-        <span className="text-2xl font-black text-white leading-none">{stats.month || 1}</span>
+        <span className="text-2xl font-black text-white leading-none">{stats.month}</span>
       </div>
 
       <div className="bg-slate-900/50 border border-slate-800 p-4 rounded-2xl flex flex-col items-center gap-1">
