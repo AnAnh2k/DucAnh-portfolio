@@ -17,7 +17,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
   useEffect(() => {
     if (!supabase) return
 
-    // 1. Theo dõi Online Realtime
+    // 1. Theo dõi Online Realtime (Presence)
     const channel = supabase.channel('online-users', {
       config: { presence: { key: 'user' } },
     })
@@ -34,51 +34,63 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
         }
       })
 
-    // 2. Thống kê dữ liệu
-    const fetchStats = async () => {
+    // 2. Logic Cộng dồn số liệu
+    const updateAndFetchStats = async () => {
       try {
-        // Ghi nhận truy cập mới
-        if (!sessionStorage.getItem('visited')) {
-          const { error: insErr } = await supabase.from('visitors').insert([{ user_agent: navigator.userAgent }])
-          if (!insErr) {
-            sessionStorage.setItem('visited', 'true')
-          } else {
-            console.warn("Insert visitor failed (Check RLS):", insErr.message)
-          }
-        }
+        // Lấy dữ liệu hiện tại từ hàng ID=1
+        const { data: current, error: fetchErr } = await supabase
+          .from('visitors')
+          .select('*')
+          .eq('id', 1)
+          .single()
 
-        // Tính toán thời gian theo giờ Việt Nam (GMT+7)
+        if (fetchErr || !current) return
+
         const now = new Date()
-        const vnTime = new Date(now.getTime() + (7 * 60 * 60 * 1000))
-        
-        // Bắt đầu ngày hôm nay (00:00:00 GMT+7)
-        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString()
-        
-        // Bắt đầu tháng này
-        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
+        const todayStr = now.toISOString().split('T')[0] // YYYY-MM-DD
+        const currentMonth = now.getMonth() + 1
 
-        // Lấy Tổng cộng
-        const { count: total } = await supabase.from('visitors').select('*', { count: 'exact', head: true })
+        // Nếu là khách mới trong session này, tiến hành cộng dồn
+        if (!sessionStorage.getItem('visited')) {
+          let newToday = (current.last_updated_day === todayStr) ? current.today_count + 1 : 1
+          let newMonth = (current.last_updated_month === currentMonth) ? current.month_count + 1 : 1
+          let newTotal = current.total_count + 1
 
-        // Lấy Hôm nay
-        const { count: today } = await supabase.from('visitors').select('*', { count: 'exact', head: true }).gte('created_at', todayStart)
-
-        // Lấy Tháng này
-        const { count: month } = await supabase.from('visitors').select('*', { count: 'exact', head: true }).gte('created_at', monthStart)
-
-        setStats(prev => ({
-          ...prev,
-          total: total || 0,
-          today: today || 0,
-          month: month || 0
-        }))
+          await supabase
+            .from('visitors')
+            .update({
+              total_count: newTotal,
+              today_count: newToday,
+              month_count: newMonth,
+              last_updated_day: todayStr,
+              last_updated_month: currentMonth
+            })
+            .eq('id', 1)
+          
+          sessionStorage.setItem('visited', 'true')
+          
+          setStats(prev => ({
+            ...prev,
+            total: newTotal,
+            today: newToday,
+            month: newMonth
+          }))
+        } else {
+          // Nếu đã đếm rồi, chỉ hiển thị số liệu hiện có
+          setStats(prev => ({
+            ...prev,
+            total: current.total_count,
+            today: current.today_count,
+            month: current.month_count
+          }))
+        }
       } catch (err) {
         console.error("Stats Error:", err)
       }
     }
 
-    fetchStats()
-    const interval = setInterval(fetchStats, 30000) // Cập nhật mỗi 30s
+    updateAndFetchStats()
+    const interval = setInterval(updateAndFetchStats, 10000) // Cập nhật mỗi 10s
 
     const handleClickOutside = (e: MouseEvent) => {
       if (cardRef.current && !cardRef.current.contains(e.target as Node)) setIsExpanded(false)
@@ -95,7 +107,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
   if (variant === "floating") {
     return (
       <div ref={cardRef} className={cn("fixed top-6 left-6 z-[150] transition-all duration-500", isExpanded ? "w-64" : "w-auto")}>
-        <div onClick={() => setIsExpanded(!isExpanded)} className={cn("bg-slate-900/90 backdrop-blur-xl border border-white/10 cursor-pointer shadow-2xl transition-all", isExpanded ? "rounded-3xl p-6" : "px-4 h-12 rounded-full flex items-center gap-3")}>
+        <div onClick={() => setIsExpanded(!isExpanded)} className={cn("bg-slate-900/90 backdrop-blur-xl border border-white/10 cursor-pointer shadow-2xl transition-all", isExpanded ? "rounded-3xl p-6" : "px-4 h-12 rounded-full flex items-center gap-3 shadow-lg")}>
           {!isExpanded ? (
             <>
               <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
@@ -113,10 +125,10 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
                 <ChevronUp className="w-4 h-4 text-white/30" />
               </div>
               <div className="grid grid-cols-1 gap-3">
-                <StatItem icon={<Globe className="text-emerald-400" />} label="Đang Online" value={stats.online} color="text-emerald-400" />
-                <StatItem icon={<BarChart3 className="text-blue-400" />} label="Hôm nay" value={stats.today} />
-                <StatItem icon={<CalendarDays className="text-purple-400" />} label="Tháng này" value={stats.month} />
-                <StatItem icon={<Users className="text-orange-400" />} label="Tổng lượt xem" value={stats.total.toLocaleString()} />
+                <StatItem icon={<Globe className="text-emerald-400 w-4 h-4" />} label="Đang Online" value={stats.online} color="text-emerald-400" />
+                <StatItem icon={<BarChart3 className="text-blue-400 w-4 h-4" />} label="Hôm nay" value={stats.today} />
+                <StatItem icon={<CalendarDays className="text-purple-400 w-4 h-4" />} label="Tháng này" value={stats.month} />
+                <StatItem icon={<Users className="text-orange-400 w-4 h-4" />} label="Tổng lượt xem" value={stats.total.toLocaleString()} />
               </div>
             </div>
           )}
@@ -163,7 +175,7 @@ function StatItem({ icon, label, value, color = "text-white" }: any) {
   return (
     <div className="flex items-center justify-between p-2.5 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
       <div className="flex items-center gap-2">
-        <div className="w-4 h-4 flex items-center justify-center">{icon}</div>
+        {icon}
         <span className="text-[10px] font-bold text-white/50 uppercase tracking-tight">{label}</span>
       </div>
       <span className={cn("text-sm font-black", color)}>{value}</span>
