@@ -39,9 +39,9 @@ export const metadata: Metadata = {
     creator: "@AnAnh2k",
   },
   icons: {
-    icon: "/icon.png",
-    shortcut: "/icon.png",
-    apple: "/icon.png",
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
   },
   verification: {
     google: "32b-IlTr3VWweqDo57tgv5SoSKny6dK4zn911wPBGtA",
