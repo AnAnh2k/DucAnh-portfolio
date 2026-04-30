@@ -12,14 +12,16 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
   useEffect(() => {
     if (!supabase) return
 
-    // 1. Theo dõi Online Realtime
+    // 1. Theo dõi Online Realtime với ID duy nhất cho mỗi tab/thiết bị
+    const uniqueId = Math.random().toString(36).substring(7)
     const channel = supabase.channel('online-users', {
-      config: { presence: { key: 'user' } },
+      config: { presence: { key: uniqueId } },
     })
 
     channel
       .on('presence', { event: 'sync' }, () => {
         const newState = channel.presenceState()
+        // Đếm tổng số key duy nhất đang online
         const count = Object.keys(newState).length
         setStats(prev => ({ ...prev, online: count > 0 ? count : 1 }))
       })
@@ -29,7 +31,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
         }
       })
 
-    // 2. Cập nhật và lấy số liệu cộng dồn
+    // 2. Cập nhật và lấy số liệu cộng dồn (Single Row)
     const syncStats = async () => {
       try {
         const { data: current } = await supabase.from('visitors').select('*').eq('id', 1).single()
@@ -39,9 +41,9 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
         const todayStr = now.toISOString().split('T')[0]
         const currentMonth = now.getMonth() + 1
 
-        if (!sessionStorage.getItem('visited_v2')) {
-          const newToday = (current.last_updated_day === todayStr) ? current.today_count + 1 : 1
-          const newMonth = (current.last_updated_month === currentMonth) ? current.month_count + 1 : 1
+        if (!sessionStorage.getItem('visited_v3')) {
+          const newToday = (current.last_updated_day === todayStr) ? (current.today_count || 0) + 1 : 1
+          const newMonth = (current.last_updated_month === currentMonth) ? (current.month_count || 0) + 1 : 1
           const newTotal = (current.total_count || 0) + 1
 
           await supabase.from('visitors').update({
@@ -52,7 +54,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
             last_updated_month: currentMonth
           }).eq('id', 1)
           
-          sessionStorage.setItem('visited_v2', 'true')
+          sessionStorage.setItem('visited_v3', 'true')
           setStats(prev => ({ ...prev, total: newTotal, today: newToday, month: newMonth }))
         } else {
           setStats(prev => ({ ...prev, total: current.total_count, today: current.today_count, month: current.month_count }))
@@ -63,7 +65,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
     }
 
     syncStats()
-    const timer = setInterval(syncStats, 15000)
+    const timer = setInterval(syncStats, 10000)
 
     const handleClickOutside = (e: MouseEvent) => {
       if (cardRef.current && !cardRef.current.contains(e.target as Node)) setIsExpanded(false)
@@ -80,7 +82,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
   if (variant === "floating") {
     return (
       <div ref={cardRef} className={cn("fixed top-6 left-6 z-[150] transition-all duration-500", isExpanded ? "w-64" : "w-auto")}>
-        <div onClick={() => setIsExpanded(!isExpanded)} className={cn("bg-slate-900/95 backdrop-blur-xl border border-white/10 cursor-pointer shadow-2xl transition-all", isExpanded ? "rounded-3xl p-6" : "px-4 h-12 rounded-full flex items-center gap-3")}>
+        <div onClick={() => setIsExpanded(!isExpanded)} className={cn("bg-slate-900/95 backdrop-blur-xl border border-white/10 cursor-pointer shadow-2xl transition-all", isExpanded ? "rounded-3xl p-6" : "px-4 h-12 rounded-full flex items-center gap-3 shadow-lg")}>
           {!isExpanded ? (
             <>
               <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
@@ -90,15 +92,15 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
             </>
           ) : (
             <div className="w-full space-y-4 animate-in fade-in zoom-in-95 duration-300">
-              <div className="flex items-center justify-between border-b border-white/5 pb-3 font-black text-white uppercase text-[10px] tracking-widest italic">
+              <div className="flex items-center justify-between border-b border-white/5 pb-3 font-black text-white uppercase text-[10px] tracking-widest italic tracking-tighter">
                 <span>Live Traffic</span>
                 <ChevronUp className="w-4 h-4 text-white/30" />
               </div>
               <div className="grid grid-cols-1 gap-3">
-                <StatItem icon={<Globe className="text-emerald-400 w-4 h-4" />} label="Online" value={stats.online} color="text-emerald-400" />
+                <StatItem icon={<Globe className="text-emerald-400 w-4 h-4" />} label="Đang Online" value={stats.online} color="text-emerald-400" />
                 <StatItem icon={<BarChart3 className="text-blue-400 w-4 h-4" />} label="Hôm nay" value={stats.today} />
                 <StatItem icon={<CalendarDays className="text-purple-400 w-4 h-4" />} label="Tháng này" value={stats.month} />
-                <StatItem icon={<Users className="text-orange-400 w-4 h-4" />} label="Tổng cộng" value={stats.total.toLocaleString()} />
+                <StatItem icon={<Users className="text-orange-400 w-4 h-4" />} label="Tổng lượt xem" value={stats.total.toLocaleString()} />
               </div>
             </div>
           )}
@@ -122,7 +124,7 @@ function StatItem({ icon, label, value, color = "text-white" }: any) {
     <div className="flex items-center justify-between p-2.5 rounded-xl bg-white/5 border border-white/5">
       <div className="flex items-center gap-2">
         {icon}
-        <span className="text-[10px] font-bold text-white/50 uppercase">{label}</span>
+        <span className="text-[10px] font-bold text-white/50 uppercase tracking-tight">{label}</span>
       </div>
       <span className={cn("text-sm font-black", color)}>{value}</span>
     </div>
@@ -134,7 +136,7 @@ function StatBox({ icon, label, value, color }: any) {
     <div className="bg-slate-900/50 border border-slate-800 p-4 rounded-2xl flex flex-col items-center">
       <div className={cn("flex items-center gap-2 mb-1", color)}>
         {icon}
-        <span className="text-[10px] font-bold uppercase">{label}</span>
+        <span className="text-[10px] font-bold uppercase tracking-widest">{label}</span>
       </div>
       <span className="text-2xl font-black text-white">{value}</span>
     </div>
