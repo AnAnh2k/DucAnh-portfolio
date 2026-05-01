@@ -38,7 +38,7 @@ export default function Portfolio() {
     const init = async () => {
       setIsApiLoading(true);
       await fetchProjects();
-      
+
       // Artificial delay for better "icon" experience as requested
       setTimeout(() => {
         setInitialLoading(false);
@@ -47,7 +47,7 @@ export default function Portfolio() {
     };
 
     init();
-    
+
     // Back to top visibility
     const onScroll = () => {
       const el = document.querySelector(".back-to-top") as HTMLElement | null;
@@ -126,7 +126,7 @@ export default function Portfolio() {
   return (
     <>
       {/* API Progress Bar at the very top */}
-      <div 
+      <div
         className={`fixed top-0 left-0 h-[3px] bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 z-[999] transition-all duration-500 ease-out ${isApiLoading ? 'w-full opacity-100' : 'w-0 opacity-0'}`}
       />
 
@@ -139,12 +139,12 @@ export default function Portfolio() {
             </div>
             <div className="absolute inset-0 rounded-3xl bg-blue-500/20 blur-2xl animate-pulse" />
           </div>
-          
+
           <h2 className="text-2xl font-bold text-slate-100 mb-2">Đang khởi tạo Portfolio...</h2>
           <p className="text-slate-400 mb-8 max-w-xs leading-relaxed">
             Chờ Đức Anh một chút xíu nhé, dữ liệu đang được tải về từ hệ thống. 🚀
           </p>
-          
+
           <div className="w-64 h-1.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
             <div className="h-full bg-gradient-to-r from-blue-500 to-emerald-400 animate-progress-loading" />
           </div>
@@ -156,9 +156,9 @@ export default function Portfolio() {
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/20 blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-600/20 blur-[120px]" />
       </div>
-      
+
       <VisitorStatsCard variant="floating" />
-      
+
       {/* Desktop Navigation */}
       <nav className="site-menu fixed top-6 inset-x-0 mx-auto w-fit z-[100] !hidden md:!flex" aria-label="Primary">
         <a
@@ -214,16 +214,15 @@ export default function Portfolio() {
                 { id: "ProjectContainer", label: "Dự án" },
                 { id: "ContactSection", label: "Liên hệ" }
               ].map((item) => (
-                <SheetClose 
+                <SheetClose
                   key={item.id}
                   render={
                     <a
                       href={`#${item.id}`}
-                      className={`flex items-center justify-between p-4 rounded-2xl text-lg font-bold transition-all ${
-                        activeSection === item.id 
-                          ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20" 
+                      className={`flex items-center justify-between p-4 rounded-2xl text-lg font-bold transition-all ${activeSection === item.id
+                          ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
                           : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
-                      }`}
+                        }`}
                     >
                       <span>{item.label}</span>
                       {activeSection === item.id && (
@@ -238,7 +237,7 @@ export default function Portfolio() {
               <p className="text-slate-500 text-sm mb-4">Kết nối với mình</p>
               <div className="flex gap-4">
                 <a href="https://github.com/AnAnh2k" target="_blank" className="p-3 rounded-full bg-slate-900 text-slate-300 hover:text-white transition-colors">
-                  <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.041-1.416-4.041-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                  <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.041-1.416-4.041-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" /></svg>
                 </a>
               </div>
             </div>
@@ -254,16 +253,27 @@ export default function Portfolio() {
               "@context": "https://schema.org",
               "@type": "Person",
               "name": "An Đức Anh",
+              "alternateName": ["ducanhdev", "Đức Anh dev"],
               "url": "https://ducanhdev.io.vn",
+              "image": "https://ducanhdev.io.vn/assets/avatar.jpg",
+              "description": "An Đức Anh (ducanhdev) là một Fullstack Web Developer, sinh năm 2004, hiện đang là sinh viên tại Trường Đại Học Mở Hà Nội. Chuyên gia phát triển ứng dụng Web với Next.js và React.",
               "jobTitle": "Fullstack Web Developer",
-              "alumniOf": "Đại học Công nghệ Giao thông vận tải",
+              "alumniOf": {
+                "@type": "CollegeOrUniversity",
+                "name": "Trường Đại học Mở Hà Nội"
+              },
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Hà Nội",
+                "addressCountry": "VN"
+              },
               "sameAs": [
                 "https://github.com/AnAnh2k",
                 "https://www.facebook.com/anducanh125/"
               ],
               "brand": {
                 "@type": "Brand",
-                "name": "Đức Anh Developer"
+                "name": "ducanhdev"
               }
             })
           }}
@@ -291,8 +301,8 @@ export default function Portfolio() {
                 </span>
               </h1>
               <p className="text-base sm:text-lg md:text-xl text-slate-400 max-w-xl mx-auto md:mx-0 leading-relaxed font-medium">
-                Mình sinh năm <span className="text-slate-100 font-bold">2004</span>, 
-                hiện tại mình là <span className="text-slate-100 font-bold">sinh viên năm cuối</span> mong muốn 
+                Mình sinh năm <span className="text-slate-100 font-bold">2004</span>,
+                hiện tại mình là <span className="text-slate-100 font-bold">sinh viên năm cuối</span> mong muốn
                 trở thành <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 font-black">Fullstack Web Developer</span>.
               </p>
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-6 justify-center md:justify-start">
@@ -585,7 +595,7 @@ export default function Portfolio() {
                       <h2>Học vấn & Kỹ năng mềm</h2>
                     </div>
                     <p>
-                      Hanoi Open University (2022 - 2026). Kỹ năng mềm nổi bật
+                      Trường Đại học Mở Hà Nội (2022 - 2026). Kỹ năng mềm nổi bật
                       gồm thuyết trình, làm việc nhóm, làm việc độc lập và tinh
                       thần chủ động học hỏi. Tiếng Anh: TOEIC 650 (expected).
                     </p>
@@ -698,7 +708,7 @@ export default function Portfolio() {
                     Đức Anh luôn sẵn sàng lắng nghe những ý tưởng mới và cơ hội hợp tác. Đừng ngần ngại để lại lời nhắn!
                   </p>
                 </div>
-                
+
                 <div className="space-y-4">
                   <div className="flex items-center gap-6 p-6 rounded-[32px] bg-slate-900/40 border border-slate-800 group hover:border-blue-500/30 transition-all">
                     <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
@@ -761,9 +771,9 @@ export default function Portfolio() {
                         className="min-h-[150px] rounded-[32px] bg-slate-950 border-slate-800 focus:border-blue-500 text-white transition-all p-6 resize-none"
                       />
                     </div>
-                    <Button 
+                    <Button
                       type="submit"
-                      disabled={isSending} 
+                      disabled={isSending}
                       className="w-full h-16 rounded-[24px] bg-white text-slate-950 hover:bg-slate-200 font-black text-lg transition-all active:scale-[0.98] shadow-xl"
                     >
                       {isSending ? "Đang gửi..." : "Gửi tin nhắn ngay"}
@@ -800,7 +810,7 @@ export default function Portfolio() {
                 target="_blank"
                 className="hover:text-white transition-colors bg-slate-900 p-3 rounded-full"
               >
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
               </a>
             </div>
             <div className="text-slate-500 text-sm flex items-center gap-2 font-medium">
