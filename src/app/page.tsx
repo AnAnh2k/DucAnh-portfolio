@@ -753,6 +753,7 @@ export default function Portfolio() {
                       />
                     </div>
                     <Button 
+                      type="submit"
                       disabled={isSending} 
                       className="w-full h-16 rounded-[24px] bg-white text-slate-950 hover:bg-slate-200 font-black text-lg transition-all active:scale-[0.98] shadow-xl"
                     >
