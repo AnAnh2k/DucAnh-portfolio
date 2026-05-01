@@ -99,6 +99,15 @@ export default function Portfolio() {
     e.preventDefault();
     setIsSending(true);
     setIsApiLoading(true);
+    // Kiểm tra định dạng email cơ bản
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Định dạng email không hợp lệ!");
+      setIsSending(false);
+      setIsApiLoading(false);
+      return;
+    }
+
     const { error } = await supabase
       .from("contacts")
       .insert([{ name, email, message }]);
