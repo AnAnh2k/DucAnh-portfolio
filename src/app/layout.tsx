@@ -13,11 +13,11 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Đức Anh Developer | Fullstack Web Developer",
-    template: "%s | Đức Anh Developer",
+    default: "An Đức Anh | Fullstack Web Developer Portfolio",
+    template: "%s | An Đức Anh",
   },
-  description: "Portfolio cá nhân của An Đức Anh (ducanhdev) - Fullstack Web Developer. Chuyên thiết kế và phát triển ứng dụng web hiện đại với React, Next.js và Node.js.",
-  keywords: ["ducanhdev", "Đức Anh Developer", "An Đức Anh", "Fullstack Developer", "Next.js", "Portfolio", "Web Developer Vietnam", "duc anh dev", "software engineer"],
+  description: "Portfolio cá nhân của An Đức Anh (ducanhdev) - Fullstack Web Developer tại Hà Nội. Chuyên xây dựng ứng dụng Web hiện đại, tối ưu SEO và trải nghiệm người dùng.",
+  keywords: ["An Đức Anh", "ducanhdev", "An Đức Anh Portfolio", "Đức Anh Developer", "Fullstack Developer Hà Nội", "An Đức Anh Đại học Mở"],
   authors: [{ name: "An Đức Anh", url: "https://ducanhdev.io.vn" }],
   creator: "An Đức Anh",
   metadataBase: new URL("https://ducanhdev.io.vn"),
