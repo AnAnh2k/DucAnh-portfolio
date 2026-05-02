@@ -89,6 +89,7 @@ export default function Portfolio() {
     const { data } = await supabase
       .from("projects")
       .select("*")
+      .order("display_order", { ascending: true })
       .order("created_at", { ascending: false });
     if (data) setProjects(data);
   };
@@ -634,8 +635,15 @@ export default function Portfolio() {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-                {projects.map((project) => (
-                  <article key={project.id} className="flex flex-col bg-slate-900/40 border border-slate-800 rounded-[24px] overflow-hidden hover:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/10 group h-full">
+                {projects.map((project, index) => (
+                  <article key={project.id} className="flex flex-col bg-slate-900/40 border border-slate-800 rounded-[24px] overflow-hidden hover:border-slate-700 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/10 group h-full relative">
+                    {/* Badge Thứ tự dự án */}
+                    <div className="absolute top-6 left-6 z-20 flex items-center justify-center w-10 h-10 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700/50 shadow-lg group-hover:scale-110 transition-transform">
+                      <span className="text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-emerald-400 font-black text-lg">
+                        #{project.display_order || index + 1}
+                      </span>
+                    </div>
+
                     <div className="p-4 bg-slate-800/30">
                       <div className="aspect-video rounded-2xl overflow-hidden border border-slate-700/50 relative">
                         {project.image_url ? (

@@ -24,6 +24,7 @@ export default function ProjectsPage() {
   const [description, setDescription] = useState("")
   const [demoUrl, setDemoUrl] = useState("")
   const [repoUrl, setRepoUrl] = useState("")
+  const [displayOrder, setDisplayOrder] = useState<number>(1)
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   
@@ -40,7 +41,7 @@ export default function ProjectsPage() {
   const fetchProjects = async () => {
     setLoading(true)
     window.dispatchEvent(new CustomEvent('api-loading', { detail: true }))
-    const { data } = await supabase.from("projects").select("*").order("created_at", { ascending: false })
+    const { data } = await supabase.from("projects").select("*").order("display_order", { ascending: true }).order("created_at", { ascending: false })
     if (data) setProjects(data)
     setLoading(false)
     window.dispatchEvent(new CustomEvent('api-loading', { detail: false }))
@@ -54,6 +55,7 @@ export default function ProjectsPage() {
     setDescription("")
     setDemoUrl("")
     setRepoUrl("")
+    setDisplayOrder(projects.length + 1)
     setImageFile(null)
   }
 
@@ -65,6 +67,7 @@ export default function ProjectsPage() {
     setDescription(project.description || "")
     setDemoUrl(project.demo_url || "")
     setRepoUrl(project.repo_url || "")
+    setDisplayOrder(project.display_order || 1)
     setImageFile(null)
     setIsOpen(true)
   }
@@ -99,6 +102,7 @@ export default function ProjectsPage() {
         description,
         demo_url: demoUrl,
         repo_url: repoUrl,
+        display_order: displayOrder,
         image_url: imageUrl
       }
 
@@ -224,15 +228,33 @@ export default function ProjectsPage() {
                 </div>
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Công nghệ (Tech Stack)</label>
-                <Input
-                  value={techStack}
-                  onChange={e => setTechStack(e.target.value)}
-                  required
-                  placeholder="Vd: React, Node.js, Supabase"
-                  className="h-10 rounded-xl border-slate-100 bg-slate-50 text-xs text-slate-900 focus-visible:ring-blue-500"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Công nghệ (Tech Stack)</label>
+                  <Input
+                    value={techStack}
+                    onChange={e => setTechStack(e.target.value)}
+                    required
+                    placeholder="Vd: React, Node.js, Supabase"
+                    className="h-10 rounded-xl border-slate-100 bg-slate-50 text-xs text-slate-900 focus-visible:ring-blue-500"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Thứ tự hiển thị</label>
+                  <div className="relative">
+                    <select 
+                      value={displayOrder} 
+                      onChange={e => setDisplayOrder(Number(e.target.value))}
+                      required
+                      className="flex h-10 w-full rounded-xl border border-slate-100 bg-slate-50 px-3 py-2 text-xs text-slate-900 ring-offset-background focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer pr-8 font-medium"
+                    >
+                      {Array.from({ length: projects.length + (editingProject ? 0 : 1) }, (_, i) => i + 1).map(num => (
+                        <option key={num} value={num}>Vị trí số {num}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                  </div>
+                </div>
               </div>
 
               <div className="space-y-1.5">
