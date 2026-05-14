@@ -29,7 +29,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { toast } from "sonner"
 
 // --- Animation Variants --------------------------------------------------------
-const EASE = [0.22, 1, 0.36, 1]
+const EASE = [0.22, 1, 0.36, 1] as const
 
 const collapseVariants = {
   open: {
