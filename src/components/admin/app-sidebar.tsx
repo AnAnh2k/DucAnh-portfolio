@@ -2,7 +2,7 @@
 import * as React from "react"
 import {
   LayoutDashboard, FolderKanban, MessageSquare,
-  LogOut, Briefcase, ChevronRight,
+  LogOut, Briefcase, ChevronRight, CalendarDays
 } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
 import { supabase } from "@/lib/supabase"
@@ -63,6 +63,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const menuItems = [
     { title: "Tổng quan",           icon: LayoutDashboard, url: "/admin" },
     { title: "Dự án cá nhân",       icon: FolderKanban,    url: "/admin/projects" },
+    { title: "Nhật ký (Memories)",  icon: CalendarDays,    url: "/admin/memories" },
     { title: "Tin nhắn",            icon: MessageSquare,   url: "/admin/messages", badge: unreadCount },
   ]
 

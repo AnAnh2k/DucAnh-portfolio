@@ -190,6 +190,12 @@ export default function Portfolio() {
         >
           Liên hệ
         </a>
+        <a
+          href="/memories"
+          className="menu-link"
+        >
+          Nhật ký
+        </a>
       </nav>
 
       {/* Mobile Navigation Trigger */}
@@ -233,6 +239,16 @@ export default function Portfolio() {
                   }
                 />
               ))}
+              <SheetClose
+                render={
+                  <a
+                    href="/memories"
+                    className="flex items-center justify-between p-4 rounded-2xl text-lg font-bold transition-all text-slate-400 hover:bg-slate-900 hover:text-slate-200"
+                  >
+                    <span>Nhật ký</span>
+                  </a>
+                }
+              />
             </div>
             <div className="mt-auto p-8 border-t border-slate-900">
               <p className="text-slate-500 text-sm mb-4">Kết nối với mình</p>

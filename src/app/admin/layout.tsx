@@ -8,6 +8,7 @@ import { AppSidebar } from "@/components/admin/app-sidebar"
 const PAGE_LABELS: Record<string, string> = {
   "/admin": "Tổng Quan",
   "/admin/projects": "Dự Án",
+  "/admin/memories": "Nhật Ký",
   "/admin/messages": "Tin Nhắn",
 }
 
