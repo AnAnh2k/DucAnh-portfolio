@@ -6,7 +6,7 @@ import "react-quill-new/dist/quill.snow.css"
 import { toast } from "sonner"
 
 // Dynamic import for ReactQuill to avoid SSR issues
-const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false })
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false }) as any
 
 interface RichTextEditorProps {
   value: string
