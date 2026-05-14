@@ -29,6 +29,14 @@ export const metadata: Metadata = {
     description: "Khám phá các dự án và kỹ năng của An Đức Anh - Fullstack Developer chuyên nghiệp.",
     url: "https://ducanhdev.io.vn",
     siteName: "Đức Anh Developer Portfolio",
+    images: [
+      {
+        url: "/assets/coverImage.png",
+        width: 1200,
+        height: 630,
+        alt: "Đức Anh Developer Portfolio",
+      },
+    ],
     locale: "vi_VN",
     type: "website",
   },
@@ -36,6 +44,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Đức Anh Developer | Fullstack Web Developer",
     description: "Portfolio của An Đức Anh - Fullstack Developer chuyên nghiệp.",
+    images: ["/assets/coverImage.png"],
     creator: "@AnAnh2k",
   },
   icons: {

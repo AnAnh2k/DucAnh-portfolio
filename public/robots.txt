@@ -3,4 +3,7 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
+User-agent: facebookexternalhit
+Allow: /
+
 Sitemap: https://ducanhdev.io.vn/sitemap.xml
