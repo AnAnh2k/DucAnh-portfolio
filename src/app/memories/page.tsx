@@ -13,6 +13,7 @@ import {
   Lock,
   Unlock,
   Key,
+  Globe,
   LogOut
 } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -333,14 +334,16 @@ export default function MemoriesPage() {
                                                       <div className="flex items-center gap-[18px] bg-[#371E12]/72 backdrop-blur-[10px] border border-white/10 rounded-[26px] p-[18px] pr-5 cursor-pointer min-h-[120px] group/card" style={{ maxWidth: "min(100%, 900px)" }} onClick={() => handleOpenMemory(post)}>
                                                         <div className="w-[92px] h-[92px] rounded-[20px] overflow-hidden shrink-0 border border-white/10 relative">
                                                           <img src={post.background_image || "/assets/default-memory.png"} className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-[1.06]" alt="Memory" />
-                                                          {post.password && <div className="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/60 flex items-center justify-center text-white backdrop-blur-sm"><Lock className="w-3 h-3" /></div>}
+                                                          <div className={`absolute top-1 right-1 w-7 h-7 rounded-full flex items-center justify-center text-white backdrop-blur-md border border-white/20 ${post.password ? 'bg-orange-500/60' : 'bg-blue-500/60'}`}>
+                                                            {post.password ? <Lock className="w-3.5 h-3.5" /> : <Globe className="w-3.5 h-3.5" />}
+                                                          </div>
                                                         </div>
                                                         <div className="flex-1 min-w-0">
                                                           <h4 className="text-xl md:text-[22px] font-[800] text-[#FFF4E6] truncate mb-1.5 group-hover/card:text-[#F4D03F]">{post.title || "Kỷ niệm không tên"}</h4>
                                                           <div className="text-[15px] text-[#E8D9C8] font-medium leading-[1.6] opacity-85 line-clamp-2" dangerouslySetInnerHTML={{ __html: post.content.replace(/<[^>]*>?/gm, '') }} />
                                                         </div>
-                                                        <div className="w-[52px] h-[52px] rounded-full bg-[rgba(255,183,77,0.15)] flex items-center justify-center text-[#FFB74D] border border-[#FFB74D]/35 shrink-0 hover:bg-[#FFB74D] hover:text-[#2C1810]">
-                                                          {post.password ? <Lock className="w-[22px] h-[22px]" /> : <Eye className="w-[22px] h-[22px]" />}
+                                                        <div className={`w-[52px] h-[52px] rounded-full flex items-center justify-center border shrink-0 transition-all ${post.password ? 'bg-orange-500/10 text-orange-400 border-orange-500/30' : 'bg-blue-500/10 text-blue-400 border-blue-500/30'}`}>
+                                                          {post.password ? <Lock className="w-[22px] h-[22px]" /> : <Globe className="w-[22px] h-[22px]" />}
                                                         </div>
                                                       </div>
                                                     </motion.div>

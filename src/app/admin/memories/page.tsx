@@ -17,6 +17,7 @@ import {
   Eye,
   Calendar,
   Lock,
+  Globe,
   ChevronDown,
   BarChart3,
   Clock
@@ -116,7 +117,7 @@ export default function AdminMemoriesPage() {
         post_date: postDate,
         content,
         background_image: imageUrl,
-        password: password.toLowerCase().trim()
+        password: password ? password.toLowerCase().trim() : ""
       }
 
       if (editingMemory) {
@@ -524,24 +525,27 @@ export default function AdminMemoriesPage() {
               return (
                 <div key={m.id} className="memory-admin-card group hover:border-orange-200 hover:shadow-xl hover:shadow-orange-100/50 transition-all duration-300">
                   <div className="relative w-24 h-20 rounded-2xl overflow-hidden shadow-sm shrink-0 border border-slate-100">
-                    <img 
-                      src={m.background_image || "/assets/default-memory.png"} 
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-                      alt="thumb" 
-                    />
-                    {m.password && (
-                      <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/60 flex items-center justify-center text-white backdrop-blur-sm">
-                        <Lock className="w-2.5 h-2.5" />
+                      <img 
+                        src={m.background_image || "/assets/default-memory.png"} 
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                        alt="thumb" 
+                      />
+                      <div className={`absolute top-1 right-1 w-6 h-6 rounded-full flex items-center justify-center text-white backdrop-blur-md border border-white/20 ${m.password ? 'bg-orange-500/80' : 'bg-green-500/80'}`}>
+                        {m.password ? <Lock className="w-3 h-3" /> : <Globe className="w-3 h-3" />}
                       </div>
-                    )}
-                  </div>
+                    </div>
 
                   <div className="flex-1 min-w-0 pr-4">
                     <div className="flex items-center gap-3 mb-1">
                       <h4 className="text-lg font-black text-slate-900 truncate tracking-tight">{m.title || "Không tiêu đề"}</h4>
-                      <span className="date-badge shrink-0">
-                        {day} • {month} • {year}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="date-badge shrink-0">
+                          {day} • {month} • {year}
+                        </span>
+                        <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${m.password ? 'bg-orange-100 text-orange-600' : 'bg-green-100 text-green-600'}`}>
+                          {m.password ? 'Private' : 'Public'}
+                        </span>
+                      </div>
                     </div>
                     <div 
                       className="text-sm text-slate-500 font-medium line-clamp-2 leading-relaxed"
