@@ -222,10 +222,30 @@ export default function MemoriesPage() {
           background: #E67E22; border-radius: 10px; border: 2px solid #2C1810;
         }
         .scrapbook-content img {
-          max-width: 100%; height: auto;
-          border-radius: 32px; margin: 2.5rem 0;
-          box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+          max-width: 100%;
+          max-height: 75vh;
+          width: auto;
+          height: auto;
+          border-radius: 20px;
+          margin: 2.5rem auto;
+          display: block;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+          transition: transform 0.4s ease;
+          animation: fade-in-up 0.8s ease-out forwards;
         }
+        .scrapbook-content img:hover {
+          transform: scale(1.03);
+        }
+        @keyframes fade-in-up {
+          from { opacity: 0; transform: translateY(15px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-scrollbar::-webkit-scrollbar { width: 8px; }
+        .modal-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .modal-scrollbar::-webkit-scrollbar-thumb {
+          background: #E8D9C8; border-radius: 10px; border: 2px solid #FDFBF7;
+        }
+        .modal-scrollbar::-webkit-scrollbar-thumb:hover { background: #D4A373; }
         .collapse-wrapper { overflow: hidden; }
       `}} />
 
@@ -402,29 +422,42 @@ export default function MemoriesPage() {
 
       {/* --- Detail Modal --- */}
       <Dialog open={!!selectedMemory} onOpenChange={open => !open && setSelectedMemory(null)}>
-        <DialogContent showCloseButton={false} className="max-w-[1200px] w-[92vw] h-[92vh] p-0 rounded-[40px] overflow-y-auto border border-white/15 shadow-[0_30px_90px_rgba(0,0,0,0.4)] bg-[#FFF8F0] custom-scrollbar">
+        <DialogContent showCloseButton={false} className="max-w-[1200px] w-[92vw] h-[92vh] p-0 rounded-[40px] overflow-y-auto border border-white/40 shadow-[0_40px_100px_rgba(0,0,0,0.2)] bg-[#FDFBF7] custom-scrollbar">
           {selectedMemory && (
-            <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.45, ease: EASE }} className="flex flex-col min-h-full">
+            <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.45, ease: EASE }} className="flex flex-col min-h-full relative">
+              
               <div className="relative h-[400px] md:h-[520px] w-full shrink-0">
                 <img src={selectedMemory.background_image || "/assets/default-memory.png"} className="w-full h-full object-cover" alt="Hero" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#FFF8F0] via-transparent to-black/25" />
-                <button onClick={() => setSelectedMemory(null)} className="absolute top-8 right-8 w-14 h-14 rounded-full bg-black/40 backdrop-blur-xl flex items-center justify-center text-white hover:bg-[#E67E22] z-50 border border-white/30"><X className="w-7 h-7" /></button>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#FDFBF7] via-transparent to-black/25" />
+                
+                {/* Close Button */}
+                <button onClick={() => setSelectedMemory(null)} className="absolute top-8 right-8 w-14 h-14 rounded-full bg-black/40 backdrop-blur-xl flex items-center justify-center text-white hover:bg-[#E67E22] z-50 border border-white/30 transition-colors">
+                  <X className="w-7 h-7" />
+                </button>
+                
                 <div className="absolute bottom-0 left-0 w-full p-10 md:p-16">
                   <div className="max-w-[900px] mx-auto">
                     <div className="flex items-center gap-4 text-[#E67E22] font-black uppercase tracking-[3px] text-base mb-5 bg-white shadow-xl w-fit px-6 py-2 rounded-full">
                       <CalendarDays className="w-5 h-5" />
                       {new Date(selectedMemory.post_date).toLocaleDateString('vi-VN', { day: '2-digit', month: 'long', year: 'numeric' })}
                     </div>
-                    <DialogTitle className="text-5xl md:text-7xl font-[900] text-[#2C1810] leading-[1.05] tracking-tight">{selectedMemory.title || "Ký ức đáng nhớ"}</DialogTitle>
+                    <DialogTitle className="text-5xl md:text-7xl font-[900] text-[#2C1810] leading-[1.05] tracking-tight">
+                      {selectedMemory.title || "Ký ức đáng nhớ"}
+                    </DialogTitle>
                   </div>
                 </div>
               </div>
-              <div className="flex-1 bg-[#FFF8F0] px-8 md:px-16 py-16 md:py-24">
+
+              <div className="flex-1 px-8 md:px-16 py-16 md:py-24 bg-[#FDFBF7]">
                 <div className="max-w-[850px] mx-auto scrapbook-content">
-                  <div className="text-xl md:text-2xl text-[#3A2A20] leading-[2.1] font-medium" dangerouslySetInnerHTML={{ __html: selectedMemory.content }} />
-                  <div className="mt-24 pt-12 border-t-2 border-[#2C1810]/5 flex flex-col items-center gap-6 opacity-50">
-                    <div className="flex gap-4"><Heart className="w-9 h-9 text-[#E67E22] fill-[#E67E22]" /><Sparkles className="w-9 h-9 text-[#F4D03F]" /></div>
-                    <p className="text-base font-black uppercase tracking-[4px] text-[#2C1810]">Ghi lại từ trái tim</p>
+                  <div className="text-[16px] md:text-[18px] text-[#5A4A40] leading-[1.7] font-medium" dangerouslySetInnerHTML={{ __html: selectedMemory.content }} />
+                  
+                  <div className="mt-20 pt-10 border-t border-[#8C6B5D]/20 flex flex-col items-center gap-4 opacity-70">
+                    <div className="flex gap-3">
+                      <Heart className="w-6 h-6 text-[#D4A373] fill-[#D4A373]" />
+                      <Sparkles className="w-6 h-6 text-[#D4A373]" />
+                    </div>
+                    <p className="text-xs font-bold uppercase tracking-[3px] text-[#8C6B5D]">Lưu Giữ Kỷ Niệm</p>
                   </div>
                 </div>
               </div>
