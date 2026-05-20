@@ -85,6 +85,7 @@ export default function MemoriesPage() {
   
   // --- Password Gate States ---
   const [isPageUnlocked, setIsPageUnlocked] = useState(false)
+  const [showPasswordInput, setShowPasswordInput] = useState(false)
   const [pagePassword, setPagePassword] = useState("")
   const [memoryPasswords, setMemoryPasswords] = useState<Record<string, string>>({})
   const [memoryToUnlock, setMemoryToUnlock] = useState<Memory | null>(null)
@@ -171,36 +172,68 @@ export default function MemoriesPage() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           className="relative z-10 w-full max-w-md bg-white/[0.03] backdrop-blur-2xl border border-white/10 p-10 rounded-[40px] shadow-2xl text-center"
         >
-          <div className="w-20 h-20 rounded-full bg-orange-500/20 flex items-center justify-center mx-auto mb-8 ring-1 ring-orange-500/30">
-            <Lock className="w-10 h-10 text-orange-500" />
-          </div>
-          <h1 className="text-3xl font-black text-[#FFF4E6] mb-4 tracking-tight">Trang Kỷ Niệm</h1>
-          <p className="text-[#E8D9C8] mb-8 font-medium leading-relaxed">
-            Hãy điền mật khẩu viết liền, chữ viết thường để mở cuốn nhật ký.
-          </p>
-          
-          <form onSubmit={handleUnlockPage} className="space-y-4">
-            <div className="relative group">
-              <Key className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30 group-focus-within:text-orange-500 transition-colors" />
-              <Input 
-                type="password"
-                placeholder="Nhập mật khẩu..."
-                value={pagePassword}
-                onChange={e => setPagePassword(e.target.value)}
-                autoFocus
-                className="h-14 pl-12 rounded-2xl bg-white/5 border-white/10 text-white text-lg placeholder:text-white/20 focus:ring-orange-500 focus:border-orange-500 transition-all font-bold"
-              />
-            </div>
-            <Button 
-              type="submit"
-              className="w-full h-14 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black text-lg shadow-xl shadow-orange-500/20 transition-all active:scale-95"
-            >
-              Mở Khóa Kỷ Niệm
-            </Button>
-            <Link href="/" className="inline-block pt-4 text-white/40 hover:text-white text-sm font-bold transition-colors">
-              <ArrowLeft className="w-4 h-4 inline mr-2" /> Quay lại trang chủ
-            </Link>
-          </form>
+          {!showPasswordInput ? (
+            <>
+              <div className="w-20 h-20 rounded-full bg-orange-500/20 flex items-center justify-center mx-auto mb-8 ring-1 ring-orange-500/30">
+                <Lock className="w-10 h-10 text-orange-500" />
+              </div>
+              <h1 className="text-3xl font-black text-[#FFF4E6] mb-4 tracking-tight">Trang Kỷ Niệm</h1>
+              <p className="text-[#E8D9C8] mb-8 font-medium leading-relaxed">
+                Cuốn nhật ký lưu trữ những kỷ niệm đáng nhớ của An Đức Anh.
+              </p>
+              <Button 
+                onClick={() => setShowPasswordInput(true)}
+                className="w-full h-14 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black text-lg shadow-xl shadow-orange-500/20 transition-all active:scale-95 mb-4"
+              >
+                Đi đến Nhật ký
+              </Button>
+              <Link href="/" className="inline-block pt-2 text-white/40 hover:text-white text-sm font-bold transition-colors">
+                <ArrowLeft className="w-4 h-4 inline mr-2" /> Quay lại trang chủ
+              </Link>
+            </>
+          ) : (
+            <>
+              <div className="w-20 h-20 rounded-full bg-orange-500/20 flex items-center justify-center mx-auto mb-8 ring-1 ring-orange-500/30">
+                <Lock className="w-10 h-10 text-orange-500 animate-pulse" />
+              </div>
+              <h1 className="text-3xl font-black text-[#FFF4E6] mb-4 tracking-tight">Nhập Mật Khẩu</h1>
+              <p className="text-[#E8D9C8] mb-8 font-medium leading-relaxed">
+                Hãy điền mật khẩu viết liền, chữ viết thường để mở cuốn nhật ký.
+              </p>
+              
+              <form onSubmit={handleUnlockPage} className="space-y-4">
+                <div className="relative group">
+                  <Key className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30 group-focus-within:text-orange-500 transition-colors" />
+                  <Input 
+                    type="password"
+                    placeholder="Nhập mật khẩu..."
+                    value={pagePassword}
+                    onChange={e => setPagePassword(e.target.value)}
+                    autoFocus
+                    className="h-14 pl-12 rounded-2xl bg-white/5 border-white/10 text-white text-lg placeholder:text-white/20 focus:ring-orange-500 focus:border-orange-500 transition-all font-bold"
+                  />
+                </div>
+                <Button 
+                  type="submit"
+                  className="w-full h-14 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black text-lg shadow-xl shadow-orange-500/20 transition-all active:scale-95"
+                >
+                  Mở Khóa Kỷ Niệm
+                </Button>
+                <div className="flex justify-between items-center px-2 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowPasswordInput(false)}
+                    className="text-white/40 hover:text-white text-sm font-bold transition-colors"
+                  >
+                    Quay lại
+                  </button>
+                  <Link href="/" className="text-white/40 hover:text-white text-sm font-bold transition-colors">
+                    Trang chủ <ChevronRight className="w-4 h-4 inline ml-1" />
+                  </Link>
+                </div>
+              </form>
+            </>
+          )}
         </motion.div>
       </div>
     )

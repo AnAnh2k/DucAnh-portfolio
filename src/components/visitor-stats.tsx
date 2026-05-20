@@ -4,16 +4,31 @@ import { supabase } from "@/lib/supabase"
 import { Users, BarChart3, CalendarDays, Globe, ChevronUp, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | "floating" }) {
-  const [stats, setStats] = useState({ online: 1, today: 0, month: 0, total: 0 })
+export function VisitorStatsCard({ 
+  variant = "inline", 
+  stats: propStats 
+}: { 
+  variant?: "inline" | "floating"
+  stats?: { online: number; today: number; month: number; total: number } 
+}) {
+  const [internalStats, setInternalStats] = useState({ online: 1, today: 0, month: 0, total: 0 })
+  const stats = propStats || internalStats
   const [isExpanded, setIsExpanded] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    if (propStats) return
     if (!supabase) return
 
     // 1. Theo dõi Online Realtime với ID duy nhất cho mỗi tab/thiết bị
     const uniqueId = Math.random().toString(36).substring(7)
+    
+    // Xóa bất kỳ channel nào trùng tên đã đăng ký trước đó để tránh lỗi runtime
+    const existing = supabase.getChannels().find(ch => ch.topic === 'realtime:online-users')
+    if (existing) {
+      supabase.removeChannel(existing)
+    }
+
     const channel = supabase.channel('online-users', {
       config: { presence: { key: uniqueId } },
     })
@@ -23,7 +38,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
         const newState = channel.presenceState()
         // Đếm tổng số key duy nhất đang online
         const count = Object.keys(newState).length
-        setStats(prev => ({ ...prev, online: count > 0 ? count : 1 }))
+        setInternalStats(prev => ({ ...prev, online: count > 0 ? count : 1 }))
       })
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {
@@ -55,9 +70,9 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
           }).eq('id', 1)
           
           sessionStorage.setItem('visited_v3', 'true')
-          setStats(prev => ({ ...prev, total: newTotal, today: newToday, month: newMonth }))
+          setInternalStats(prev => ({ ...prev, total: newTotal, today: newToday, month: newMonth }))
         } else {
-          setStats(prev => ({ ...prev, total: current.total_count, today: current.today_count, month: current.month_count }))
+          setInternalStats(prev => ({ ...prev, total: current.total_count, today: current.today_count, month: current.month_count }))
         }
       } catch (err) {
         console.error("Stats Sync Error:", err)
@@ -77,7 +92,7 @@ export function VisitorStatsCard({ variant = "inline" }: { variant?: "inline" | 
       clearInterval(timer)
       document.removeEventListener("mousedown", handleClickOutside)
     }
-  }, [])
+  }, [propStats])
 
   if (variant === "floating") {
     return (
